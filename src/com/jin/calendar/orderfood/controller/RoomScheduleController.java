@@ -42,16 +42,37 @@ public class RoomScheduleController extends Controller {
 	public void updateRoomEvent(){
 		Map<String, Object> returnMap=new HashMap<>();
 		returnMap.put("isSuccess", true);
-		Date date=new Date(getParaToLong("start"));
+		Date start=new Date(getParaToLong("start"));
 		Date end=new Date(getParaToLong("end"));
-		if(date.before(new Date())){
+		if(start.before(new Date())){
 			returnMap.put("isSuccess", false);
-			returnMap.put("msg", "调整后的开始时间已过期，无法更新");
+			returnMap.put("msg", "调整后的开始时间已过期!");
 		}else{
 			RoomSchedule roomSchedule=RoomSchedule.dao.findById(getParaToInt("id"));
-			roomSchedule.set("start", date);
+			roomSchedule.set("start", start);
 			roomSchedule.set("end", end);
 			roomSchedule.update();
 		}
+		renderJson(returnMap);
+	}
+
+	public void addRoomEvent() {
+		Map<String, Object> returnMap = new HashMap<>();
+		returnMap.put("isSuccess", true);
+		Date start = new Date(getParaToLong("start"));
+		Date end = new Date(getParaToLong("end"));
+		String title = getPara("title");
+		String roomId = getPara("roomId");
+		if (start.before(new Date())) {
+			returnMap.put("isSuccess", false);
+			returnMap.put("msg", "开始时间已过期!");
+		} else {
+			new RoomSchedule().set("start", start)
+					.set("end", end)
+					.set("subject", title)
+					.set("userid", getSessionAttr("userId"))
+					.set("roomid", roomId).save();
+		}
+		renderJson(returnMap);
 	}
 }

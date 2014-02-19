@@ -64,15 +64,6 @@ $(document).ready(function() {
 			week: "yyyy.MM.dd{ '&#8212;' yyyy.MM.dd}",
 			day: 'ddd'
 		},
-// 		eventSources: [
-// 	               {
-// 	            	   url: '/roomSchedule/getDurationEvent',
-// 	            	   data: {
-// 	            		   roomId:roomId
-// 	            	   }
-// 	               }
-// 			],
-// 		events: '/roomSchedule/getDurationEvent?roomId='+roomId,
 		events: function( start, end, callback ) {
 			$.getJSON("/roomSchedule/getDurationEvent", { roomId: roomId,start:Math.round(start.getTime()/1000), end:Math.round(end.getTime()/1000)}, function(events){
 				callback(events);
@@ -80,10 +71,34 @@ $(document).ready(function() {
 		},
 		eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) {
 			$.getJSON("/roomSchedule/updateRoomEvent",{id: event.id, start: event.start.getTime(), end: event.end.getTime()}, function(data){
-				
+				if(!data.isSuccess){
+					alert(data.msg);
+					revertFunc();
+				}
 			});
-// 			alert(event.id+"~~~"+event.start+"__"+event.end+dayDelta+"__"+minuteDelta);
-			revertFunc();
+		},
+		eventDrop: function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) {
+			$.getJSON("/roomSchedule/updateRoomEvent",{id: event.id, start: event.start.getTime(), end: event.end.getTime()}, function(data){
+				if(!data.isSuccess){
+					alert(data.msg);
+					revertFunc();
+				}
+			});
+		},
+		selectable: true,
+		selectHelper: true,
+		select: function(start, end, allDay) {
+			var title = prompt('会议主题:');
+			if (title) {
+				$.getJSON("/roomSchedule/addRoomEvent",{start: start.getTime(), end: end.getTime(), roomId: roomId, title: title}, function(data){
+					if(data.isSuccess){
+						$('#calendar').fullCalendar('refetchEvents');
+					}else{
+						alert(data.msg);
+						$('#calendar').fullCalendar('unselect');
+					}
+				});
+			}
 		},
 		loading: function(bool) {
 			if (bool) $('#loading').show();
