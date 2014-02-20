@@ -67,8 +67,7 @@ $(document).ready(function() {
 			var copiedEventObject = $.extend({}, originalEventObject);
 			copiedEventObject.start = $.fullCalendar.formatDate(date, "yyyy-MM-dd");
 			copiedEventObject.allDay = allDay;
-			//TODO get login user
-			copiedEventObject.userId = 1;
+			copiedEventObject.userId = "<%=session.getAttribute("userId")%>";
 			copiedEventObject.state = $("input[name='timeFlag']:checked").val();
 			
 			$.getJSON("/userMenu/addFoodEvent",copiedEventObject, function(data){
@@ -88,8 +87,7 @@ $(document).ready(function() {
 	               {
 	            	   url: '/userMenu/getDurationEvent',
 	            	   data: {
-	            		   //TODO
-	            		   userId:1
+	            		   userId:"<%=session.getAttribute("userId")%>"
 	            	   }
 	               }
 			],

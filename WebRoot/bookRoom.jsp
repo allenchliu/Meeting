@@ -88,23 +88,27 @@ $(document).ready(function() {
 		selectable: true,
 		selectHelper: true,
 		select: function(start, end, allDay) {
-			var title = prompt('会议主题:');
-			if (title) {
-				$.getJSON("/roomSchedule/addRoomEvent",{start: start.getTime(), end: end.getTime(), roomId: roomId, title: title}, function(data){
-					if(data.isSuccess){
-						$('#calendar').fullCalendar('refetchEvents');
-					}else{
-						alert(data.msg);
-						$('#calendar').fullCalendar('unselect');
-					}
-				});
+			if(start.getTime()<=new Date().getTime()){
+				alert("开始时间已过期!");
+			}else{
+				var title = prompt('会议主题:');
+				if (title) {
+					$.getJSON("/roomSchedule/addRoomEvent",{start: start.getTime(), end: end.getTime(), roomId: roomId, title: title}, function(data){
+						if(data.isSuccess){
+							$('#calendar').fullCalendar('refetchEvents');
+						}else{
+							alert(data.msg);
+						}
+					});
+				}
 			}
+			$('#calendar').fullCalendar('unselect');
+
 		},
 		loading: function(bool) {
 			if (bool) $('#loading').show();
 			else $('#loading').hide();
 		}
-
 	});
 	
 	

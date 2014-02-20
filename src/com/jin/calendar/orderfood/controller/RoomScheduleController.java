@@ -71,7 +71,8 @@ public class RoomScheduleController extends Controller {
 					.set("end", end)
 					.set("subject", title)
 					.set("userid", getSessionAttr("userId"))
-					.set("roomid", roomId).save();
+					.set("roomid", roomId)
+					.set("create_date", new Date()).save();
 		}
 		renderJson(returnMap);
 	}
