@@ -10,6 +10,7 @@ import com.jfinal.core.JFinal;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
+import com.jin.calendar.orderfood.controller.AdminController;
 import com.jin.calendar.orderfood.controller.CommonController;
 import com.jin.calendar.orderfood.controller.MenuController;
 import com.jin.calendar.orderfood.controller.RoomController;
@@ -45,6 +46,7 @@ public class SysConfig extends JFinalConfig {
 		me.add("/userMenu", UserMenuController.class);
 		me.add("/room", RoomController.class);
 		me.add("/roomSchedule", RoomScheduleController.class);
+		me.add("/admin", AdminController.class);
 		
 	}
 
