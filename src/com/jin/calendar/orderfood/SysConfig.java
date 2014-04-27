@@ -15,6 +15,7 @@ import com.jin.calendar.orderfood.controller.CommonController;
 import com.jin.calendar.orderfood.controller.MenuController;
 import com.jin.calendar.orderfood.controller.RoomController;
 import com.jin.calendar.orderfood.controller.RoomScheduleController;
+import com.jin.calendar.orderfood.controller.UserController;
 import com.jin.calendar.orderfood.controller.UserMenuController;
 import com.jin.calendar.orderfood.model.Menu;
 import com.jin.calendar.orderfood.model.Room;
@@ -42,6 +43,7 @@ public class SysConfig extends JFinalConfig {
 	@Override
 	public void configRoute(Routes me) {
 		me.add("/", CommonController.class);
+		me.add("/user", UserController.class);
 		me.add("/menu", MenuController.class);
 		me.add("/userMenu", UserMenuController.class);
 		me.add("/room", RoomController.class);

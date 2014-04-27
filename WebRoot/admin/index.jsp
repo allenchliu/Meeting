@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -90,25 +91,12 @@ $(function(){
 
 				<div class="accordion" fillSpace="sidebar">
 					<div class="accordionHeader">
-						<h2><span>Folder</span>界面组件</h2>
+						<h2><span>Folder</span>资料维护</h2>
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
-							<li><a href="tabsPage.html" target="navTab">主框架面板</a>
-								<ul>
-									<li><a href="main.html" target="navTab" rel="main">我的主页</a></li>
-									<li><a href="http://www.baidu.com" target="navTab" rel="page1">页面一(外部页面)</a></li>
-									<li><a href="demo_page2.html" target="navTab" rel="external" external="true">iframe navTab页面</a></li>
-									<li><a href="demo_page1.html" target="navTab" rel="page1" fresh="false">替换页面一</a></li>
-									<li><a href="demo_page2.html" target="navTab" rel="page2">页面二</a></li>
-									<li><a href="demo_page4.html" target="navTab" rel="page3" title="页面三（自定义标签名）">页面三</a></li>
-									<li><a href="demo_page4.html" target="navTab" rel="page4" fresh="false">测试页面（fresh="false"）</a></li>
-									<li><a href="w_editor.html" target="navTab">表单提交会话超时</a></li>
-									<li><a href="demo/common/ajaxTimeout.html" target="navTab">navTab会话超时</a></li>
-									<li><a href="demo/common/ajaxTimeout.html" target="dialog">dialog会话超时</a></li>
-									<li><a href="index_menu.html" target="_blank">横向导航条</a></li>
-								</ul>
-							</li>
+							<li><a href="main.html" target="navTab" rel="main">我的主页</a></li>
+							<li><a href="/user" target="navTab" rel="userPage">用户管理</a></li>
 						</ul>
 					</div>
 				</div>

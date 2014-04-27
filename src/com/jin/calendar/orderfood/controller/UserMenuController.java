@@ -16,10 +16,18 @@ import com.jin.calendar.orderfood.bo.MenuEvent;
 import com.jin.calendar.orderfood.common.CommonConstant;
 import com.jin.calendar.orderfood.model.UserMenu;
 
+/**
+ * 订单控制器
+ * @author JinLiang
+ * @datetime 2014年4月26日 下午8:55:23
+ */
 public class UserMenuController extends Controller {
 	
 	private static Logger logger = Logger.getLogger(UserMenuController.class);
 	
+	/**
+	 * 获取时间段内的订单
+	 */
 	public void getDurationEvent(){
 		List<UserMenu> list= UserMenu.dao.getDurationOrder(getParaToInt("userId"), getParaToLong("start"), getParaToLong("end"));
 		List<MenuEvent>events=new ArrayList<>();
@@ -59,6 +67,9 @@ public class UserMenuController extends Controller {
 		renderJson(events);
 	}
 
+	/**
+	 * 新增订单
+	 */
 	public void addFoodEvent(){
 		Map<String, Object> returnMap=new HashMap<>();
 		returnMap.put("isSuccess", false);
@@ -108,6 +119,13 @@ public class UserMenuController extends Controller {
 		renderJson(returnMap);
 	}
 	
+	/**
+	 * 获取指定用户某天中餐/晚餐订单
+	 * @param userId 用户ID
+	 * @param state 1:中餐；2:晚餐
+	 * @param startDate 日期
+	 * @return
+	 */
 	private MenuEvent getSingleEvent(int userId, int state, String startDate){
 		UserMenu userMenu=UserMenu.dao.getSingleOrder(userId, state, startDate);
 		MenuEvent event=new MenuEvent(userMenu.getInt("id"),
@@ -119,6 +137,18 @@ public class UserMenuController extends Controller {
 		return event;
 	}
 	
+	/**
+	 * 判断下单时间是否合法
+	 * 规则：
+	 * 	1.下单当天之前的日期不接受订单；
+	 * 	2.下单当天之后的日期正常下单；
+	 * 	3.当天11:30后不接受午餐订单；
+	 * 	4.当天19:00后不接受晚餐订单。
+	 * @param state
+	 * @param start
+	 * @return
+	 * @throws ParseException
+	 */
 	private Map<String, Object> isLegalOrder(int state, Date start) throws ParseException{
 		Map<String, Object> returnMap=new HashMap<>();
 		returnMap.put("flag", false);
@@ -148,6 +178,6 @@ public class UserMenuController extends Controller {
 	}
 
 	private Date getAfterRuleDate() throws ParseException {
-		return DateUtils.addHours(getToday(), 18);
+		return DateUtils.addHours(getToday(), 19);
 	}
 }
