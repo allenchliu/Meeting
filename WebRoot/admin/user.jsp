@@ -38,39 +38,5 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	<div class="panelBar">
-		<div class="pages">
-			<span>显示</span>
-			<select class="combox" name="numPerPage" onchange="navTabPageBreak({numPerPage:this.value})" >
-				<c:choose>
-					<c:when test="${page.pageSize == 10}">
-						<option value="10" selected="selected">10</option>
-					</c:when>
-					<c:otherwise>
-						<option value="10">10</option>
-					</c:otherwise>
-				</c:choose>
-				<c:choose>
-					<c:when test="${page.pageSize == 50}">
-						<option value="50" selected="selected">50</option>
-					</c:when>
-					<c:otherwise>
-						<option value="50">50</option>
-					</c:otherwise>
-				</c:choose>
-				<c:choose>
-					<c:when test="${page.pageSize == 100}">
-						<option value="100" selected="selected">100</option>
-					</c:when>
-					<c:otherwise>
-						<option value="100">100</option>
-					</c:otherwise>
-				</c:choose>
-			</select>
-			<span>条，共${page.totalRow}条</span>
-		</div>
-		
-		<div class="pagination" targetType="navTab" totalCount="${page.totalRow}" numPerPage="${page.pageSize}" pageNumShown="10" currentPage="${page.pageNumber}"></div>
-
-	</div>
+	<jsp:include page="paginationBar.jsp"></jsp:include>
 </div>

@@ -586,4 +586,10 @@ table.fc-border-separate {
 	_overflow: hidden;
 	}
 	
-	
+.fc-today {
+     background:#CCCC66;
+ }
+ 
+ #calendar .fc-event{
+	box-shadow: 2px 2px 2px #706868;
+}

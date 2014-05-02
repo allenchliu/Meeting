@@ -24,6 +24,8 @@ public class RoomScheduleController extends Controller {
 					roomSchedule.getTimestamp("start"),
 					roomSchedule.getTimestamp("end"),
 					roomSchedule.getStr("username"),
+					roomSchedule.getStr("roomname"),
+					roomSchedule.getStr("email"),
 					false);
 			if (roomSchedule.getTimestamp("start").before(new Date())) {
 				event.setColor(CommonConstant.COLOR_FOR_PAST_EVENT);
@@ -47,7 +49,10 @@ public class RoomScheduleController extends Controller {
 		if(start.before(new Date())){
 			returnMap.put("isSuccess", false);
 			returnMap.put("msg", "调整后的开始时间已过期!");
-		}else{
+		}else if(! RoomSchedule.dao.isLegalEvent(getParaToLong("start")/1000, getParaToLong("end")/1000,getParaToInt("id"))){
+			returnMap.put("isSuccess", false);
+			returnMap.put("msg", "与其他会议时间有冲突！");
+		} else{
 			RoomSchedule roomSchedule=RoomSchedule.dao.findById(getParaToInt("id"));
 			roomSchedule.set("start", start);
 			roomSchedule.set("end", end);
@@ -66,6 +71,9 @@ public class RoomScheduleController extends Controller {
 		if (start.before(new Date())) {
 			returnMap.put("isSuccess", false);
 			returnMap.put("msg", "开始时间已过期!");
+		} else if(! RoomSchedule.dao.isLegalEvent(getParaToLong("start")/1000, getParaToLong("end")/1000,-100)){
+			returnMap.put("isSuccess", false);
+			returnMap.put("msg", "与其他会议时间有冲突！");
 		} else {
 			new RoomSchedule().set("start", start)
 					.set("end", end)

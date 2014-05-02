@@ -7,12 +7,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>会议室预定</title>
 <link href='../css/style.css' rel='stylesheet' />
+<link href='../css/jquery-ui.min.css' rel='stylesheet' />
 <link href='../css/fullcalendar.css' rel='stylesheet' />
 <link href='../css/fullcalendar.print.css' rel='stylesheet' media='print' />
-<link href="../css/idialog.css" rel="stylesheet" />
-<script src="../js/jquery.artDialog.min.js"></script>
+<link href='../css/jquery.qtip.min.css' rel='stylesheet'/>
 <script src='../js/jquery.min.js'></script>
 <script src='../js/jquery-ui.custom.min.js'></script>
+<script src='../js/jquery.qtip.min.js'></script>
 <script src='../js/fullcalendar.min.js'></script>
 <script>
 var roomId;
@@ -28,6 +29,7 @@ $(document).ready(function() {
 	-----------------------------------------------------------------*/
 	
 	$('#calendar').fullCalendar({
+		theme: true,
 		year: datetime.getFullYear(),
 		month: datetime.getMonth(),
 		date: datetime.getDate(),
@@ -69,6 +71,7 @@ $(document).ready(function() {
 				callback(events);
 			});
 		},
+		snapMinutes: 5,
 		eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) {
 			$.getJSON("/roomSchedule/updateRoomEvent",{id: event.id, start: event.start.getTime(), end: event.end.getTime()}, function(data){
 				if(!data.isSuccess){
@@ -105,6 +108,23 @@ $(document).ready(function() {
 			$('#calendar').fullCalendar('unselect');
 
 		},
+		eventRender: function(event, element) {
+			console.log(element.html());
+			element.qtip({ 
+				id: event.id,
+				style: {
+					classes: 'qtip-bootstrap qtip-shadow'
+				},
+				content: {
+					title: event.roomName,
+					text: getTipContent(event.userName, event.start, event.end, event.title, event.email).clone()
+				},
+				position: {
+					my: 'right center',
+					at: 'left center'
+				}
+			});
+		},
 		loading: function(bool) {
 			if (bool) $('#loading').show();
 			else $('#loading').hide();
@@ -131,6 +151,13 @@ function changeRoom(id){
 	});
 	$('#calendar').fullCalendar('refetchEvents');
 }
+function getTipContent(initiator, start, end, subject, contact){
+	$("#initiator").text(initiator);
+	$("#contact").text(contact);
+	$("#tb").text($.fullCalendar.formatDate(start,'hh:mmtt')+" - "+$.fullCalendar.formatDate(end,'hh:mmtt'));
+	$("#subject").text(subject);
+	return $('#qTipContent');
+}
 </script>
 </head>
 <body>
@@ -149,5 +176,25 @@ function changeRoom(id){
 	</div>
 	<div id='loading'>loading...</div>
 	<div id='exit'><a href="/exit">退出</a></div>
+	<div id="qTipContent">
+		<table>
+			<tr>
+				<td>发起人：</td>
+				<td><span id="initiator"></span></td>
+			</tr>
+			<tr>
+				<td>E-Mail：</td>
+				<td><span id="contact"></span></td>
+			</tr>
+			<tr>
+				<td>时间：</td>
+				<td><span id="tb"></span></td>
+			</tr>
+			<tr>
+				<td>主题：</td>
+				<td><span id="subject"></span></td>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>

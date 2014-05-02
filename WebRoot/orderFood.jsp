@@ -9,8 +9,6 @@
 <link href='../css/style.css' rel='stylesheet' />
 <link href='../css/fullcalendar.css' rel='stylesheet' />
 <link href='../css/fullcalendar.print.css' rel='stylesheet' media='print' />
-<link href="../css/idialog.css" rel="stylesheet" />
-<script src="../js/jquery.artDialog.min.js"></script>
 <script src='../js/jquery.min.js'></script>
 <script src='../js/jquery-ui.custom.min.js'></script>
 <script src='../js/fullcalendar.min.js'></script>
@@ -75,7 +73,16 @@ $(document).ready(function() {
 					$('#calendar').fullCalendar('renderEvent', data.event, false);
 				}else{
 					if(data.msgOption==1){
-						alert(data.msg);
+						if(confirm(data.msg+"["+originalEventObject.title+"]")){
+							$.getJSON("/userMenu/updateFoodEvent",copiedEventObject, function(data){
+								if(data.isSuccess){
+									$('#calendar').fullCalendar('removeEvents', data.event.id);
+									$('#calendar').fullCalendar('renderEvent', data.event, false);
+								}else{
+									alert("替换失败！");
+								}
+							});
+						}
 					}else{
 						alert(data.msg);
 					}
@@ -107,7 +114,7 @@ function changeMenu(){
 		$(".external-event").remove();
 		$(data).each(function(index) {
             var val = data[index];
-            $("#external-events").append("<div class='external-event' menuId='"+val.id+"' price='"+val.price+"'>"+val.name+"</div>");
+            $("#external-events").append("<div class='external-event' menuId='"+val.id+"' price='"+val.price+"'>"+val.name+"("+val.price+"元)</div>");
         });
 		bindData();
 	});
@@ -143,7 +150,7 @@ function bindData(){
 				<input type="radio" name="timeFlag" value="2" onclick="changeMenu()">晚餐
 			</h4>
 			<c:forEach items="${menuList}" var="menu">
-				<div class='external-event' menuId="${menu.id}" price="${menu.price }">${menu.name}</div>
+				<div class='external-event' menuId="${menu.id}" price="${menu.price }">${menu.name}(${menu.price }元)</div>
 			</c:forEach>
 		</div>
 

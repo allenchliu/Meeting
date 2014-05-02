@@ -10,7 +10,7 @@
 			</p>
 			<p>
 				<label>登录名：</label>
-				<input name="loginName" class="required" type="text" size="30" alt="请输入登录名"/>
+				<input name="loginName" class="required" type="text" size="30" alt="请输入登录名" remote="/user/isUnique"/>
 			</p>
 			<p>
 				<label>密码：</label>

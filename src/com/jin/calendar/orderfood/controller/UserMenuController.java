@@ -106,16 +106,28 @@ public class UserMenuController extends Controller {
 					return;
 				}else if(getParaToInt("state")==1){
 					returnMap.put("msgOption", 1);
-					returnMap.put("msg", getPara("start")+"午餐已定，确认更改？");
+					returnMap.put("msg", getPara("start")+"午餐已定，确认替换为");
 				}else if(getParaToInt("state")==2){
 					returnMap.put("msgOption", 1);
-					returnMap.put("msg", getPara("start")+"晚餐已定，确认更改？");
+					returnMap.put("msg", getPara("start")+"晚餐已定，确认替换为");
 				}else{
 					returnMap.put("msg", "参数传递有误！");
 				}
 			}
 		}
 
+		renderJson(returnMap);
+	}
+	
+	public void updateFoodEvent(){
+		UserMenu userMenu=UserMenu.dao.getSingleOrder(getParaToInt("userId"), getParaToInt("state"), getPara("start"));
+		userMenu.set("menuid", getParaToInt("menuId"));
+		boolean isSuccess = userMenu.update();
+		MenuEvent event=getSingleEvent(getParaToInt("userId"), getParaToInt("state"), getPara("start"));
+		event.setColor(CommonConstant.COLOR_FOR_FUTURE_EVENT);
+		Map<String, Object> returnMap=new HashMap<>();
+		returnMap.put("isSuccess", isSuccess);
+		returnMap.put("event", event);
 		renderJson(returnMap);
 	}
 	

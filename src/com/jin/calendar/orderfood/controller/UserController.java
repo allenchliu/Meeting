@@ -1,10 +1,12 @@
 package com.jin.calendar.orderfood.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.jin.calendar.orderfood.bo.DwzResponseBO;
 import com.jin.calendar.orderfood.common.CommonConstant;
 import com.jin.calendar.orderfood.model.User;
@@ -48,5 +50,14 @@ public class UserController extends Controller {
 			responseBO.setMessage("操作失败！");
 		}
 		renderJson(responseBO);
+	}
+	
+	public void isUnique(){
+		List<Record> list = Db.find("select * from user where loginName= ?", getPara("loginName"));
+		if(list.size()>0){
+			renderText("false");
+		}else{
+			renderText("true");
+		}
 	}
 }
