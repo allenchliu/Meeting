@@ -24,6 +24,6 @@
 * JFinal，FullCalendar，Jquery,qTip2
 
 ##截图
-![订餐](http://git.oschina.net/jin/MyCalendar/blob/master/Screenshot/1.png)
+![订餐 1](http://git.oschina.net/jin/MyCalendar/blob/master/Screenshot/1.png "1")
 
-![会议室预定](http://git.oschina.net/jin/MyCalendar/blob/master/Screenshot/2.png)
+![会议室预定 2](http://git.oschina.net/jin/MyCalendar/blob/master/Screenshot/2.png "2")
