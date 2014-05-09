@@ -10,7 +10,7 @@
 				<th width="80">价格</th>
 				<th width="80">餐别</th>
 				<th width="80">姓名</th>
-				<th width="80">TEl</th>
+				<th width="80">TEL</th>
 				<th width="80">e-mail</th>
 			</tr>
 		</thead>

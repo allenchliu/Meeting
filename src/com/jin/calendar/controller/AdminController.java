@@ -1,8 +1,8 @@
-package com.jin.calendar.orderfood.controller;
+package com.jin.calendar.controller;
 
 import com.jfinal.core.Controller;
-import com.jin.calendar.orderfood.model.RoomSchedule;
-import com.jin.calendar.orderfood.model.UserMenu;
+import com.jin.calendar.model.RoomSchedule;
+import com.jin.calendar.model.UserMenu;
 
 public class AdminController extends Controller {
 

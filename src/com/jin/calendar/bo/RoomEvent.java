@@ -1,4 +1,4 @@
-package com.jin.calendar.orderfood.bo;
+package com.jin.calendar.bo;
 
 import java.util.Date;
 

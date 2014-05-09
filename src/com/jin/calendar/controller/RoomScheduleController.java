@@ -1,4 +1,4 @@
-package com.jin.calendar.orderfood.controller;
+package com.jin.calendar.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.jfinal.core.Controller;
-import com.jin.calendar.orderfood.bo.RoomEvent;
-import com.jin.calendar.orderfood.common.CommonConstant;
-import com.jin.calendar.orderfood.model.RoomSchedule;
+import com.jin.calendar.bo.RoomEvent;
+import com.jin.calendar.common.CommonConstant;
+import com.jin.calendar.model.RoomSchedule;
 
 public class RoomScheduleController extends Controller {
 

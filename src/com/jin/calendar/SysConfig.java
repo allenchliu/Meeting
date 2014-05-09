@@ -1,4 +1,4 @@
-package com.jin.calendar.orderfood;
+package com.jin.calendar;
 
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -10,18 +10,18 @@ import com.jfinal.core.JFinal;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
-import com.jin.calendar.orderfood.controller.AdminController;
-import com.jin.calendar.orderfood.controller.CommonController;
-import com.jin.calendar.orderfood.controller.MenuController;
-import com.jin.calendar.orderfood.controller.RoomController;
-import com.jin.calendar.orderfood.controller.RoomScheduleController;
-import com.jin.calendar.orderfood.controller.UserController;
-import com.jin.calendar.orderfood.controller.UserMenuController;
-import com.jin.calendar.orderfood.model.Menu;
-import com.jin.calendar.orderfood.model.Room;
-import com.jin.calendar.orderfood.model.RoomSchedule;
-import com.jin.calendar.orderfood.model.User;
-import com.jin.calendar.orderfood.model.UserMenu;
+import com.jin.calendar.controller.AdminController;
+import com.jin.calendar.controller.CommonController;
+import com.jin.calendar.controller.MenuController;
+import com.jin.calendar.controller.RoomController;
+import com.jin.calendar.controller.RoomScheduleController;
+import com.jin.calendar.controller.UserController;
+import com.jin.calendar.controller.UserMenuController;
+import com.jin.calendar.model.Menu;
+import com.jin.calendar.model.Room;
+import com.jin.calendar.model.RoomSchedule;
+import com.jin.calendar.model.User;
+import com.jin.calendar.model.UserMenu;
 
 /**
  * 系统配置类，继承JFinalConfig，用于对整个项目进行配置

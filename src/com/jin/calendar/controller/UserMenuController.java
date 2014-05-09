@@ -1,4 +1,4 @@
-package com.jin.calendar.orderfood.controller;
+package com.jin.calendar.controller;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
-import com.jin.calendar.orderfood.bo.MenuEvent;
-import com.jin.calendar.orderfood.common.CommonConstant;
-import com.jin.calendar.orderfood.model.UserMenu;
+import com.jin.calendar.bo.MenuEvent;
+import com.jin.calendar.common.CommonConstant;
+import com.jin.calendar.model.UserMenu;
 
 /**
  * 订单控制器

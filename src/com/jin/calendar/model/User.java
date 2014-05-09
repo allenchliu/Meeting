@@ -1,4 +1,4 @@
-package com.jin.calendar.orderfood.model;
+package com.jin.calendar.model;
 
 import com.jfinal.plugin.activerecord.Model;
 

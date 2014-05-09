@@ -1,4 +1,4 @@
-package com.jin.calendar.orderfood.controller;
+package com.jin.calendar.controller;
 
 import java.util.List;
 
@@ -6,9 +6,9 @@ import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.jin.calendar.orderfood.bo.DwzResponseBO;
-import com.jin.calendar.orderfood.common.CommonConstant;
-import com.jin.calendar.orderfood.model.Room;
+import com.jin.calendar.bo.DwzResponseBO;
+import com.jin.calendar.common.CommonConstant;
+import com.jin.calendar.model.Room;
 
 /**
  * 会议室Controller控制类

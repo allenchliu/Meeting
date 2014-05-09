@@ -1,4 +1,4 @@
-package com.jin.calendar.orderfood.common;
+package com.jin.calendar.common;
 
 public class CommonConstant {
 

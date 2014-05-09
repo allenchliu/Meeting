@@ -1,13 +1,13 @@
-package com.jin.calendar.orderfood.controller;
+package com.jin.calendar.controller;
 
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.jfinal.core.Controller;
-import com.jin.calendar.orderfood.model.Menu;
-import com.jin.calendar.orderfood.model.Room;
-import com.jin.calendar.orderfood.model.User;
+import com.jin.calendar.model.Menu;
+import com.jin.calendar.model.Room;
+import com.jin.calendar.model.User;
 
 public class CommonController extends Controller {
 
