@@ -10,7 +10,8 @@
 - 演示地址：http://fcdemo.sinaapp.com/     
 - 后台地址：http://fcdemo.sinaapp.com/admin
 - 用户名：jin   密码：123
-- 部署SinaApp上，数据库可以读取，但是不能做update或insert操作，不知道为什么。
+- ~部署SinaApp上，数据库可以读取，但是不能做update或insert操作，不知道为什么~。
+- 原来SinaApp数据库分主从库，主库域名:w.rdc.sae.sina.com.cn/从库域名:r.rdc.sae.sina.com.cn,主库可写，从库只能读。
 
 ###运行说明
 1. 执行WebRoot/DBInit下的数据库初始脚本；
