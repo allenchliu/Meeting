@@ -10,7 +10,7 @@
 - 演示地址：http://fcdemo.sinaapp.com/     
 - 后台地址：http://fcdemo.sinaapp.com/admin
 - 用户名：jin   密码：123
-- 部署SinaApp上，数据库可以读取，但是不能做update或insert操作，不知道问什么。
+- 部署SinaApp上，数据库可以读取，但是不能做update或insert操作，不知道为什么。
 
 ###运行说明
 1. 执行WebRoot/DBInit下的数据库初始脚本；
@@ -24,6 +24,6 @@
 * JFinal，FullCalendar，Jquery,qTip2
 
 ##截图
-![订餐 1](http://git.oschina.net/jin/MyCalendar/blob/master/Screenshot/1.png "1")
+![订餐](http://git.oschina.net/jin/MyCalendar/raw/master/Screenshot/1.png)
 
-![会议室预定 2](http://git.oschina.net/jin/MyCalendar/blob/master/Screenshot/2.png "2")
+![会议室预定](http://git.oschina.net/jin/MyCalendar/raw/master/Screenshot/2.png)
