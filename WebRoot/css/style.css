@@ -72,3 +72,8 @@ body {
 #exit a:HOVER {
 	color: #660099;
 }
+
+.delIcon{
+	float: right;
+	margin-right: 5px;
+}

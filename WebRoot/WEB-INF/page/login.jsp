@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>用户登录</title>
-<link href="../css/login.css" rel='stylesheet' />
+<link href="/css/login.css" rel='stylesheet' />
 <script type="text/javascript">
 function switchSys(event){
 	if(event.id=='order-food'){

@@ -6,12 +6,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>我的订餐</title>
-<link href='../css/style.css' rel='stylesheet' />
-<link href='../css/fullcalendar.css' rel='stylesheet' />
-<link href='../css/fullcalendar.print.css' rel='stylesheet' media='print' />
-<script src='../js/jquery.min.js'></script>
-<script src='../js/jquery-ui.custom.min.js'></script>
-<script src='../js/fullcalendar.min.js'></script>
+<link href='/css/style.css' rel='stylesheet' />
+<link href='/css/fullcalendar.css' rel='stylesheet' />
+<link href='/css/fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='/js/jquery.min.js'></script>
+<script src='/js/jquery-ui.custom.min.js'></script>
+<script src='/js/fullcalendar.min.js'></script>
 <script>
 $(document).ready(function() {
 	
@@ -91,13 +91,20 @@ $(document).ready(function() {
 			
 		},
 		eventSources: [
-	               {
-	            	   url: '/userMenu/getDurationEvent',
-	            	   data: {
-	            		   userId:"<%=session.getAttribute("userId")%>"
-	            	   }
-	               }
+               {
+            	   url: '/userMenu/getDurationEvent',
+            	   data: {
+            		   userId:"<%=session.getAttribute("userId")%>"
+            	   }
+               }
 			],
+		eventMouseover: function( event, jsEvent, view ) {
+			$(this).children("div").append("<a class='delIcon' href=''>X</a>");
+			console.log($(this).html());
+		},
+		eventMouseout: function( event, jsEvent, view ) {
+			$(".delIcon").remove();
+		},
 		loading: function(bool) {
 			if (bool) $('#loading').show();
 			else $('#loading').hide();

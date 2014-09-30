@@ -35,6 +35,7 @@ public class SysConfig extends JFinalConfig {
 
 		me.setDevMode(true);//配置当前为开发模式
 		me.setViewType(ViewType.JSP);//配置默认视图为JSP
+		me.setBaseViewPath("/WEB-INF/page");
 		
 		loadPropertyFile("jdbcConfig.properties");//加载数据库连接配置
 
@@ -72,8 +73,7 @@ public class SysConfig extends JFinalConfig {
 
 	@Override
 	public void configInterceptor(Interceptors me) {
-		// TODO Auto-generated method stub
-
+		me.add( new LoginInterceptor());
 	}
 
 	@Override

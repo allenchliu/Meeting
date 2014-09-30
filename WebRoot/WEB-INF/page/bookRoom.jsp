@@ -6,15 +6,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>会议室预定</title>
-<link href='../css/style.css' rel='stylesheet' />
-<link href='../css/jquery-ui.min.css' rel='stylesheet' />
-<link href='../css/fullcalendar.css' rel='stylesheet' />
-<link href='../css/fullcalendar.print.css' rel='stylesheet' media='print' />
-<link href='../css/jquery.qtip.min.css' rel='stylesheet'/>
-<script src='../js/jquery.min.js'></script>
-<script src='../js/jquery-ui.custom.min.js'></script>
-<script src='../js/jquery.qtip.min.js'></script>
-<script src='../js/fullcalendar.min.js'></script>
+<link href='/css/style.css' rel='stylesheet' />
+<link href='/css/jquery-ui.min.css' rel='stylesheet' />
+<link href='/css/fullcalendar.css' rel='stylesheet' />
+<link href='/css/fullcalendar.print.css' rel='stylesheet' media='print' />
+<link href='/css/jquery.qtip.min.css' rel='stylesheet'/>
+<script src='/js/jquery.min.js'></script>
+<script src='/js/jquery-ui.custom.min.js'></script>
+<script src='/js/jquery.qtip.min.js'></script>
+<script src='/js/fullcalendar.min.js'></script>
 <script>
 var roomId;
 
@@ -109,7 +109,7 @@ $(document).ready(function() {
 
 		},
 		eventRender: function(event, element) {
-			console.log(element.html());
+// 			console.log(element.html());
 			element.qtip({ 
 				id: event.id,
 				style: {
@@ -144,7 +144,6 @@ function changeRoom(id){
 		if(this.id==id){
 			$(this).css("backgroundColor", "#003399");
 			roomId = $(this).attr("roomId");
-// 			alert(roomId);
 		}else{
 			$(this).css("backgroundColor", "#3366CC");
 		}

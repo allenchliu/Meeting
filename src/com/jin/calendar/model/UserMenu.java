@@ -11,7 +11,7 @@ public class UserMenu extends Model<UserMenu> {
 	public List<UserMenu> getDurationOrder(int userId, long start, long end){
 		String sqlStr="select x.*,y.name menu_name,y.price from user_menu x left join menu y on x.menuid=y.id where x.userid= "
 				+ userId + " and x.order_date>=from_unixtime(" + start
-				+ ") and x.order_date<from_unixtime(" + end + ")";
+				+ ") and x.order_date<from_unixtime(" + end + ") order by x.state";
 		return UserMenu.dao.find(sqlStr);
 	}
 	

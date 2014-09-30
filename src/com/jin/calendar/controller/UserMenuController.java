@@ -185,10 +185,20 @@ public class UserMenuController extends Controller {
 		return DateUtils.parseDate(DateFormatUtils.format(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd");
 	}
 
+	/**
+	 * 午餐订单截止时间（11:30）
+	 * @return
+	 * @throws ParseException
+	 */
 	private Date getForeRuleDate() throws ParseException {
 		return DateUtils.addMinutes(getToday(), 690);
 	}
 
+	/**
+	 * 晚餐订单截止时间(19:00)
+	 * @return
+	 * @throws ParseException
+	 */
 	private Date getAfterRuleDate() throws ParseException {
 		return DateUtils.addHours(getToday(), 19);
 	}
