@@ -17,7 +17,6 @@
 <script src='/js/fullcalendar.min.js'></script>
 <script>
 var roomId;
-
 $(document).ready(function() {
 	
 	roomId = $("#room1").attr("roomId");
@@ -73,7 +72,7 @@ $(document).ready(function() {
 		},
 		snapMinutes: 5,
 		eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) {
-			$.getJSON("/roomSchedule/updateRoomEvent",{id: event.id, start: event.start.getTime(), end: event.end.getTime()}, function(data){
+			$.getJSON("/roomSchedule/updateRoomEvent",{id: event.id, start: event.start.getTime(), end: event.end.getTime(), roomId: roomId}, function(data){
 				if(!data.isSuccess){
 					alert(data.msg);
 					revertFunc();
@@ -81,7 +80,7 @@ $(document).ready(function() {
 			});
 		},
 		eventDrop: function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) {
-			$.getJSON("/roomSchedule/updateRoomEvent",{id: event.id, start: event.start.getTime(), end: event.end.getTime()}, function(data){
+			$.getJSON("/roomSchedule/updateRoomEvent",{id: event.id, start: event.start.getTime(), end: event.end.getTime(), roomId: roomId}, function(data){
 				if(!data.isSuccess){
 					alert(data.msg);
 					revertFunc();

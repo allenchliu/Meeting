@@ -12,21 +12,21 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>后台管理</title>
-<link href="admin/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
-<link href="admin/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
-<link href="admin/themes/css/print.css" rel="stylesheet" type="text/css" media="print"/>
+<link href="/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
+<link href="/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
+<link href="/themes/css/print.css" rel="stylesheet" type="text/css" media="print"/>
 
-<script src="admin/js/jquery-1.7.2.min.js" type="text/javascript"></script>
-<script src="admin/js/jquery.cookie.js" type="text/javascript"></script>
-<script src="admin/js/jquery.validate.min.js" type="text/javascript"></script>
-<script src="admin/js/jquery.bgiframe.js" type="text/javascript"></script>
+<script src="/js/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="/js/jquery.cookie.js" type="text/javascript"></script>
+<script src="/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="/js/jquery.bgiframe.js" type="text/javascript"></script>
 
-<script src="admin/js/dwz.min.js" type="text/javascript"></script>
-<script src="admin/js/dwz.regional.zh.js" type="text/javascript"></script>
+<script src="/js/dwz.min.js" type="text/javascript"></script>
+<script src="/js/dwz.regional.zh.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 $(function(){
-	DWZ.init("admin/dwz.frag.xml", {
+	DWZ.init("/dwz.frag.xml", {
 //		loginUrl:"login.jsp", loginTitle:"登录",	// 弹出登录对话框
 		loginUrl:"login.jsp",	// 跳到登录页面
 //		statusCode:{ok:200, error:300, timeout:301}, //【可选】
@@ -34,7 +34,7 @@ $(function(){
 		debug:true,	// 调试模式 【true|false】
 		callback:function(){
 			initEnv();
-			$("#themeList").theme({themeBase:"admin/themes"}); // themeBase 相对于index页面的主题base路径
+			$("#themeList").theme({themeBase:"/themes"}); // themeBase 相对于index页面的主题base路径
 		}
 	});
 });
@@ -49,7 +49,7 @@ $(function(){
 				<a class="logo" href="http://j-ui.com">标志</a>
 				<ul class="nav">
 					<li><a href="#">设置</a></li>
-					<li><a href="#">退出</a></li>
+					<li><a href="/exit">退出</a></li>
 				</ul>
 				<ul class="themeList" id="themeList">
 					<li theme="default"><div class="selected">蓝色</div></li>

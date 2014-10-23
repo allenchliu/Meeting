@@ -16,13 +16,17 @@ public class UserController extends Controller {
 	public void index(){
 		Page<User> page = User.dao.paginate(CommonConstant.PAGENUMBER, CommonConstant.PAGESIZE, "select *", "from user");
 		setAttr("page", page);
-		render("/admin/user.jsp");
+		render("user.jsp");
 	}
 
 	public void getPageList(){
 		Page<User> page = User.dao.paginate(getParaToInt("pageNum"), getParaToInt("numPerPage"), "select *", "from user");
 		setAttr("page", page);
-		render("/admin/user.jsp");
+		render("user.jsp");
+	}
+	
+	public void goAdd(){
+		render("user_add.jsp");
 	}
 	
 	public void add(){

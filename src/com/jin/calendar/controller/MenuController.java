@@ -19,15 +19,15 @@ import com.jin.calendar.model.Menu;
 public class MenuController extends Controller {
 	
 	public void index(){
-		Page<Menu> page = Menu.dao.paginate(CommonConstant.PAGENUMBER, CommonConstant.PAGESIZE, "select *", "from menu");
+		Page<Menu> page = Menu.dao.paginate(CommonConstant.PAGENUMBER, CommonConstant.PAGESIZE, "select *", "from menu order by id DESC");
 		setAttr("page", page);
-		render("/admin/menu.jsp");
+		render("menu.jsp");
 	}
 
 	public void getPageList(){
-		Page<Menu> page = Menu.dao.paginate(getParaToInt("pageNum"), getParaToInt("numPerPage"), "select *", "from menu");
+		Page<Menu> page = Menu.dao.paginate(getParaToInt("pageNum"), getParaToInt("numPerPage"), "select *", "from menu order by id DESC");
 		setAttr("page", page);
-		render("/admin/menu.jsp");
+		render("menu.jsp");
 	}
 	
 	public void getMenu() {
@@ -43,6 +43,9 @@ public class MenuController extends Controller {
 		renderJson(list);
 	}
 	
+	public void goAdd(){
+		render("menu_add.jsp");
+	}
 	
 	public void add(){
 		DwzResponseBO responseBO = new DwzResponseBO(getPara("navTabId"),"closeCurrent");

@@ -10,7 +10,7 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="admin/menu_add.jsp" target="dialog" mask=true minable=false ref="dlg_menu_add" title="新增" width="550" height="300"><span>新增</span></a></li>
+			<li><a class="add" href="menu/goAdd" target="dialog" mask=true minable=false ref="dlg_menu_add" title="新增" width="550" height="300"><span>新增</span></a></li>
 			<li><a class="delete" href="menu/del/{menu_id}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 		</ul>
 	</div>

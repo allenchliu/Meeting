@@ -12,6 +12,8 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.jin.calendar.bo.MenuEvent;
 import com.jin.calendar.common.CommonConstant;
 import com.jin.calendar.model.UserMenu;
@@ -31,38 +33,36 @@ public class UserMenuController extends Controller {
 	public void getDurationEvent(){
 		List<UserMenu> list= UserMenu.dao.getDurationOrder(getParaToInt("userId"), getParaToLong("start"), getParaToLong("end"));
 		List<MenuEvent>events=new ArrayList<>();
-		try {
-			Date today = getToday();
-			for (UserMenu userMenu : list) {
-				MenuEvent event = new MenuEvent(userMenu.getInt("id"),
-						userMenu.getStr("menu_name"),
-						userMenu.getTimestamp("order_date"), 
-						userMenu.getFloat("price"),
-						userMenu.getInt("state"),
-						userMenu.getInt("menuid"));
-				if(userMenu.getTimestamp("order_date").before(today)){
-					event.setColor(CommonConstant.COLOR_FOR_PAST_EVENT);
-				} else if(userMenu.getTimestamp("order_date").after(today)){
+
+		Date today = getToday();
+		for (UserMenu userMenu : list) {
+			MenuEvent event = new MenuEvent(userMenu.getInt("id"),
+					userMenu.getStr("menu_name"),
+					userMenu.getTimestamp("order_date"), 
+					userMenu.getFloat("price"),
+					userMenu.getInt("state"),
+					userMenu.getInt("menuid"));
+			if(userMenu.getTimestamp("order_date").before(today)){
+				event.setColor(CommonConstant.COLOR_FOR_PAST_EVENT);
+				event.setIsExpire(1);
+			} else if(userMenu.getTimestamp("order_date").after(today)){
+				event.setColor(CommonConstant.COLOR_FOR_FUTURE_EVENT);
+			} else{
+				if(new Date().before(getForeRuleDate())){
 					event.setColor(CommonConstant.COLOR_FOR_FUTURE_EVENT);
-				} else{
-					if(new Date().before(getForeRuleDate())){
-						event.setColor(CommonConstant.COLOR_FOR_FUTURE_EVENT);
-					}else if(new Date().after(getAfterRuleDate())){
+				}else if(new Date().after(getAfterRuleDate())){
+					event.setColor(CommonConstant.COLOR_FOR_PAST_EVENT);
+					event.setIsExpire(1);
+				}else{
+					if(userMenu.getInt("state")==1){
 						event.setColor(CommonConstant.COLOR_FOR_PAST_EVENT);
+						event.setIsExpire(1);
 					}else{
-						if(userMenu.getInt("state")==1){
-							event.setColor(CommonConstant.COLOR_FOR_PAST_EVENT);
-						}else{
-							event.setColor(CommonConstant.COLOR_FOR_FUTURE_EVENT);
-						}
+						event.setColor(CommonConstant.COLOR_FOR_FUTURE_EVENT);
 					}
 				}
-				events.add(event);
 			}
-		} catch (ParseException e) {
-			logger.error(e.getMessage());
-			renderError(500);
-			return;
+			events.add(event);
 		}
 		renderJson(events);
 	}
@@ -75,13 +75,7 @@ public class UserMenuController extends Controller {
 		returnMap.put("isSuccess", false);
 		returnMap.put("msgOption", 0);
 		Date start = getParaToDate("start");
-		try {
-			returnMap = isLegalOrder(getParaToInt("state"), start);
-		} catch (ParseException e) {
-			logger.error(e.getMessage());
-			renderError(500);
-			return;
-		}
+		returnMap = isLegalOrder(getParaToInt("state"), start);
 		
 		if((boolean) returnMap.get("flag")){
 			UserMenu u=UserMenu.dao.getSingleOrder(getParaToInt("userId"), getParaToInt("state"), getPara("start"));
@@ -131,6 +125,15 @@ public class UserMenuController extends Controller {
 		renderJson(returnMap);
 	}
 	
+	public void delFootEvent(){
+		Record record = Db.findById("user_menu", getPara(0));
+		if(record.getTimestamp("order_date").before(getToday())){
+			renderNull();
+		}
+		Db.deleteById("user_menu", getPara(0));
+		redirect("/");
+	}
+	
 	/**
 	 * 获取指定用户某天中餐/晚餐订单
 	 * @param userId 用户ID
@@ -161,7 +164,7 @@ public class UserMenuController extends Controller {
 	 * @return
 	 * @throws ParseException
 	 */
-	private Map<String, Object> isLegalOrder(int state, Date start) throws ParseException{
+	private Map<String, Object> isLegalOrder(int state, Date start){
 		Map<String, Object> returnMap=new HashMap<>();
 		returnMap.put("flag", false);
 		Date date=new Date();
@@ -181,8 +184,14 @@ public class UserMenuController extends Controller {
 		return returnMap;
 	}
 	
-	private Date getToday() throws ParseException {
-		return DateUtils.parseDate(DateFormatUtils.format(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd");
+	private Date getToday() {
+		Date date = null;
+		try {
+			date = DateUtils.parseDate(DateFormatUtils.format(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date;
 	}
 
 	/**
@@ -190,7 +199,7 @@ public class UserMenuController extends Controller {
 	 * @return
 	 * @throws ParseException
 	 */
-	private Date getForeRuleDate() throws ParseException {
+	private Date getForeRuleDate() {
 		return DateUtils.addMinutes(getToday(), 690);
 	}
 
@@ -199,7 +208,7 @@ public class UserMenuController extends Controller {
 	 * @return
 	 * @throws ParseException
 	 */
-	private Date getAfterRuleDate() throws ParseException {
+	private Date getAfterRuleDate() {
 		return DateUtils.addHours(getToday(), 19);
 	}
 }

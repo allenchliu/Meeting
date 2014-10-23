@@ -64,16 +64,16 @@ body {
 	color: #fff;
 }
 
-#exit a:FOCUS,#exit a:LINK,#exit a:VISITED {
-	text-decoration: none;
-	color: #669999;
-}
-
-#exit a:HOVER {
-	color: #660099;
-}
-
 .delIcon{
 	float: right;
 	margin-right: 5px;
+	text-align:center;
+	background:#ffffff;
+	width:17px;
+	border-radius:50%;
+	font-weight:bold;
 }
+#exit a:link,.delIcon a:link {color: purple; text-decoration:none;}
+#exit a:active,.delIcon a:active:{color: red; }
+#exit a:visited,.delIcon a:visited {color: purple;text-decoration:none;}
+#exit a:hover,.delIcon a:hover {color: red; text-decoration:none;}

@@ -20,15 +20,18 @@ public class RoomController extends Controller {
 	public void index(){
 		Page<Room> page = Room.dao.paginate(CommonConstant.PAGENUMBER, CommonConstant.PAGESIZE, "select *", "from room");
 		setAttr("page", page);
-		render("/admin/room.jsp");
+		render("room.jsp");
 	}
 
 	public void getPageList(){
 		Page<Room> page = Room.dao.paginate(getParaToInt("pageNum"), getParaToInt("numPerPage"), "select *", "from room");
 		setAttr("page", page);
-		render("/admin/room.jsp");
+		render("room.jsp");
 	}
 	
+	public void goAdd(){
+		render("room_add.jsp");
+	}
 	
 	public void add(){
 		DwzResponseBO responseBO = new DwzResponseBO(getPara("navTabId"),"closeCurrent");

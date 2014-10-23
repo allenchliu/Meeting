@@ -9,17 +9,13 @@ public class UserMenu extends Model<UserMenu> {
 	public static final UserMenu dao=new UserMenu();
 
 	public List<UserMenu> getDurationOrder(int userId, long start, long end){
-		String sqlStr="select x.*,y.name menu_name,y.price from user_menu x left join menu y on x.menuid=y.id where x.userid= "
-				+ userId + " and x.order_date>=from_unixtime(" + start
-				+ ") and x.order_date<from_unixtime(" + end + ") order by x.state";
-		return UserMenu.dao.find(sqlStr);
+		String sqlStr="select x.*,y.name menu_name,y.price from user_menu x left join menu y on x.menuid=y.id where x.userid= ? and x.order_date>=from_unixtime(?) and x.order_date<from_unixtime(?) order by x.state";
+		return UserMenu.dao.find(sqlStr,userId,start,end);
 	}
 	
 	public UserMenu getSingleOrder(int userId, int state, String startDate){
-		String sqlStr="select x.*,y.name menu_name,y.price from user_menu x left join menu y on x.menuid=y.id where x.userid= "
-				+ userId + " and x.state=" + state
-				+ " and UNIX_TIMESTAMP(x.order_date)=UNIX_TIMESTAMP('"+startDate+"')";
-		return UserMenu.dao.findFirst(sqlStr);
+		String sqlStr="select x.*,y.name menu_name,y.price from user_menu x left join menu y on x.menuid=y.id where x.userid= ? and x.state=? and UNIX_TIMESTAMP(x.order_date)=UNIX_TIMESTAMP(?)";
+		return UserMenu.dao.findFirst(sqlStr,userId,state,startDate);
 	}
 	
 	/**

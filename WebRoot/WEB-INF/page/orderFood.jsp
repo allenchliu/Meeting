@@ -99,8 +99,9 @@ $(document).ready(function() {
                }
 			],
 		eventMouseover: function( event, jsEvent, view ) {
-			$(this).children("div").append("<a class='delIcon' href=''>X</a>");
-			console.log($(this).html());
+			if(event.isExpire == 0){
+				$(this).children("div").append("<div class='delIcon'><a href='/userMenu/delFootEvent/"+event.id+"'>&times</a></div>");
+			}
 		},
 		eventMouseout: function( event, jsEvent, view ) {
 			$(".delIcon").remove();

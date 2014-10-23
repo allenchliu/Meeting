@@ -16,7 +16,7 @@
 		</thead>
 		<tbody>
 			<c:forEach items="${orderList}" var="item">
-				<tr <c:if test="${item.state==2 }">bgcolor="#CCCC66"</c:if>>>
+				<tr <c:if test="${item.state==2 }">bgcolor="#CCCC66"</c:if>>
 					<td>${item.menu_name}</td>
 					<td>${item.price}</td>
 					<td>

@@ -49,7 +49,7 @@ public class RoomScheduleController extends Controller {
 		if(start.before(new Date())){
 			returnMap.put("isSuccess", false);
 			returnMap.put("msg", "调整后的开始时间已过期!");
-		}else if(! RoomSchedule.dao.isLegalEvent(getParaToLong("start")/1000, getParaToLong("end")/1000,getParaToInt("id"))){
+		}else if(! RoomSchedule.dao.isLegalEvent(getParaToLong("start")/1000, getParaToLong("end")/1000,getParaToInt("roomId"),getParaToInt("id"))){
 			returnMap.put("isSuccess", false);
 			returnMap.put("msg", "与其他会议时间有冲突！");
 		} else{
@@ -67,11 +67,11 @@ public class RoomScheduleController extends Controller {
 		Date start = new Date(getParaToLong("start"));
 		Date end = new Date(getParaToLong("end"));
 		String title = getPara("title");
-		String roomId = getPara("roomId");
+		int roomId = getParaToInt("roomId");
 		if (start.before(new Date())) {
 			returnMap.put("isSuccess", false);
 			returnMap.put("msg", "开始时间已过期!");
-		} else if(! RoomSchedule.dao.isLegalEvent(getParaToLong("start")/1000, getParaToLong("end")/1000,-100)){
+		} else if(! RoomSchedule.dao.isLegalEvent(getParaToLong("start")/1000, getParaToLong("end")/1000,roomId,-100)){
 			returnMap.put("isSuccess", false);
 			returnMap.put("msg", "与其他会议时间有冲突！");
 		} else {

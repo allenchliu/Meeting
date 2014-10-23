@@ -6,7 +6,7 @@
 		<div class="pageFormContent" layoutH="50">
 			<p>
 				<label>菜品名称：</label>
-				<input name="name" class="required" type="text" maxlength="9" size="30" alt="请输入菜名" remote="/menu/isUnique"/>
+				<input name="name" class="required" type="text" maxlength="10" size="20" alt="请输入菜名" remote="/menu/isUnique"/>
 			</p>
 			<p>
 				<label>价格：</label>

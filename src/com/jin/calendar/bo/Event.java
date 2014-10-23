@@ -14,6 +14,9 @@ public class Event implements Serializable {
 	protected String color;
 	protected String backgroundColor;
 	protected boolean editable;
+	
+	//custom
+	protected int isExpire;
 	public int getId() {
 		return id;
 	}
@@ -55,6 +58,12 @@ public class Event implements Serializable {
 	}
 	public void setBackgroundColor(String backgroundColor) {
 		this.backgroundColor = backgroundColor;
+	}
+	public int getIsExpire() {
+		return isExpire;
+	}
+	public void setIsExpire(int isExpire) {
+		this.isExpire = isExpire;
 	}
 	
 }
