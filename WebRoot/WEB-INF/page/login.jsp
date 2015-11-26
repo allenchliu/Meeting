@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>用户登录</title>
+<title>User Login</title>
 <link href="/css/login.css" rel='stylesheet' />
 <script type="text/javascript">
 function switchSys(event){
@@ -19,21 +19,23 @@ function switchSys(event){
 <body>
 	<div id="container">
 		<form action="/login" method="post">
-<!-- 			<div class="login">用户登录</div> -->
-			<div class="username-text">用户名</div>
-			<div class="password-text">密码</div>
+<!-- 			<div class="login">User Login</div> -->
+			<div class="username-text">User Name</div>
+			<div class="password-text">Password</div>
 			<div class="username-field">
 				<input type="text" name="username" />
 			</div>
 			<div class="password-field">
 				<input type="password" name="password" />
 			</div>
+			<!-- 
 			<input type="checkbox" name="pageType" id="order-food" checked="checked" onclick="switchSys(this)" value="orderFood" /><label
-				for="order-food">订餐</label>
+				for="order-food">Food</label>
 			<input type="checkbox" name="pageType" id="book-room" onclick="switchSys(this)" value="bookRoom" /><label
-				for="book-room">预定会议室</label>
-			<div class="forgot-usr-pwd">${msg }</div>
+				for="book-room" selected="">Meeting Room</label>
+			 -->
 			<input type="submit" name="submit" value="GO" />
+			<div class="forgot-usr-pwd">${msg }</div>
 		</form>
 	</div>
 </body>
