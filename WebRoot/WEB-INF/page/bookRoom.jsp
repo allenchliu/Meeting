@@ -39,6 +39,9 @@ $(document).ready(function() {
 		},
 		defaultView:'agendaWeek',
 		firstDay:1,
+		weekends:false,
+		minTime: 9,
+		maxTime: 19,
 		allDaySlot: false,
 		allDayDefault: false,
 		buttonText: {
@@ -46,24 +49,6 @@ $(document).ready(function() {
 			month: 'Month',
 			week: 'Week',
 			day: 'Day'
-		},
-		monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-		monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
-		dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-		timeFormat: {
-			agenda: 'h:mmtt{ - h:mmtt}',
-			'': 'h(:mm)tt'
-		},
-		columnFormat: {
-			month: 'ddd',
-			week: 'MM/dd ddd',
-			day: 'ddd'
-		},
-		titleFormat: {
-			month: 'yyyy 年 MMM 月',
-			week: "yyyy.MM.dd{ '&#8212;' yyyy.MM.dd}",
-			day: 'ddd'
 		},
 		events: function( start, end, callback ) {
 			$.getJSON("/roomSchedule/getDurationEvent", { roomId: roomId,start:Math.round(start.getTime()/1000), end:Math.round(end.getTime()/1000)}, function(events){
@@ -91,7 +76,7 @@ $(document).ready(function() {
 		selectHelper: true,
 		select: function(start, end, allDay) {
 			if(start.getTime()<=new Date().getTime()){
-				alert("Start time is already passed...");
+				alert("Please select a future hour.");
 			}else{
 				var title = prompt('Meeting Subject: ');
 				if (title) {
@@ -106,23 +91,6 @@ $(document).ready(function() {
 			}
 			$('#calendar').fullCalendar('unselect');
 
-		},
-		eventRender: function(event, element) {
-// 			console.log(element.html());
-			element.qtip({ 
-				id: event.id,
-				style: {
-					classes: 'qtip-bootstrap qtip-shadow'
-				},
-				content: {
-					title: event.roomName,
-					text: getTipContent(event.userName, event.start, event.end, event.title, event.email).clone()
-				},
-				position: {
-					my: 'right center',
-					at: 'left center'
-				}
-			});
 		},
 		loading: function(bool) {
 			if (bool) $('#loading').show();
