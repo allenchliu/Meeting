@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>会议室预定</title>
+<title>Meeting Room Reservation</title>
 <link href='/css/style.css' rel='stylesheet' />
 <link href='/css/jquery-ui.min.css' rel='stylesheet' />
 <link href='/css/fullcalendar.css' rel='stylesheet' />
@@ -42,15 +42,15 @@ $(document).ready(function() {
 		allDaySlot: false,
 		allDayDefault: false,
 		buttonText: {
-			today: '今天',
-			month: '月',
-			week: '周',
-			day: '日'
+			today: 'Today',
+			month: 'Month',
+			week: 'Week',
+			day: 'Day'
 		},
-		monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+		monthNames: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 		monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
-		dayNames: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-		dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+		dayNames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 		timeFormat: {
 			agenda: 'h:mmtt{ - h:mmtt}',
 			'': 'h(:mm)tt'
@@ -91,9 +91,9 @@ $(document).ready(function() {
 		selectHelper: true,
 		select: function(start, end, allDay) {
 			if(start.getTime()<=new Date().getTime()){
-				alert("开始时间已过期!");
+				alert("Start time is already passed...");
 			}else{
-				var title = prompt('会议主题:');
+				var title = prompt('Meeting Subject: ');
 				if (title) {
 					$.getJSON("/roomSchedule/addRoomEvent",{start: start.getTime(), end: end.getTime(), roomId: roomId, title: title}, function(data){
 						if(data.isSuccess){
@@ -162,7 +162,7 @@ function getTipContent(initiator, start, end, subject, contact){
 	<div id='wrap'>
 
 		<div id='external-events'>
-			<h4>会议室</h4>
+			<h4>Meeting Rooms</h4>
 			<c:forEach items="${roomList}" var="room" varStatus="status">
 				<div class='external-event' id="room${status.count}" roomId="${room.id}" onclick="changeRoom(this.id)">${room.name}</div>
 			</c:forEach>
@@ -173,23 +173,25 @@ function getTipContent(initiator, start, end, subject, contact){
 		<div style='clear: both'></div>
 	</div>
 	<div id='loading'>loading...</div>
+	<!-- 
 	<div id='exit'><a href="/exit">退出</a></div>
+	 -->
 	<div id="qTipContent">
 		<table>
 			<tr>
-				<td>发起人：</td>
+				<td>Created By: </td>
 				<td><span id="initiator"></span></td>
 			</tr>
 			<tr>
-				<td>E-Mail：</td>
+				<td>Contact: </td>
 				<td><span id="contact"></span></td>
 			</tr>
 			<tr>
-				<td>时间：</td>
+				<td>Time Slot: </td>
 				<td><span id="tb"></span></td>
 			</tr>
 			<tr>
-				<td>主题：</td>
+				<td>subject: </td>
 				<td><span id="subject"></span></td>
 			</tr>
 		</table>
