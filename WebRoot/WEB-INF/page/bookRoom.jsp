@@ -78,9 +78,11 @@ $(document).ready(function() {
 			if(start.getTime()<=new Date().getTime()){
 				alert("Please select a future hour.");
 			}else{
-				var title = prompt('Meeting Subject: ');
-				if (title) {
-					$.getJSON("/roomSchedule/addRoomEvent",{start: start.getTime(), end: end.getTime(), roomId: roomId, title: title}, function(data){
+				// var title = prompt('Meeting Subject: ');
+				var userName = prompt("Your Name: ");
+				var password = prompt("Set a simple password: ");
+				if (userName) {
+					$.getJSON("/roomSchedule/addRoomEvent",{start: start.getTime(), end: end.getTime(), roomId: roomId, title: "", userName: userName, password: password}, function(data){
 						if(data.isSuccess){
 							$('#calendar').fullCalendar('refetchEvents');
 						}else{

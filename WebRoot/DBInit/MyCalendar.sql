@@ -11,11 +11,11 @@ drop table room_schedule;
 create table user(
 id int primary key auto_increment,
 name varchar(8) not null,
-loginName varchar(32) not null,
-password varchar(16) not null,
-tel varchar(14) not null,
-email varchar(32) not null,
-create_date datetime not null
+loginName varchar(32),
+password varchar(16),
+tel varchar(14),
+email varchar(32),
+create_date datetime
 );
 insert into user(id,name, loginName, password, tel, email, create_date) values(1,'吾同树','jin', '123' ,'15102751852', 'jins321@gmail.com','2014-04-26 22:07:37');
 insert into user(id,name, loginName, password, tel, email, create_date) values(2,'天仙姐姐','jie', '123' ,'15105201314', '5201314@qq.com','2014-04-26 22:07:37');
@@ -61,10 +61,10 @@ create table room(
 id int primary key auto_increment,
 name varchar(32) not null
 );
-insert into room(id,name) values(1,'会议室一');
-insert into room(id,name) values(2,'会议室二');
-insert into room(id,name) values(3,'会议室三');
-insert into room(id,name) values(4,'会议室四');
+insert into room(id,name) values(1,'Room1');
+insert into room(id,name) values(2,'Room2');
+insert into room(id,name) values(3,'Room3');
+insert into room(id,name) values(4,'Room4');
 
 create table room_schedule(
 id int primary key auto_increment,

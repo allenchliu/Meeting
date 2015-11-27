@@ -10,6 +10,7 @@ import com.jfinal.core.Controller;
 import com.jin.calendar.bo.RoomEvent;
 import com.jin.calendar.common.CommonConstant;
 import com.jin.calendar.model.RoomSchedule;
+import com.jin.calendar.model.User;
 
 public class RoomScheduleController extends Controller {
 
@@ -63,6 +64,8 @@ public class RoomScheduleController extends Controller {
         Date start = new Date(getParaToLong("start"));
         Date end = new Date(getParaToLong("end"));
         String title = getPara("title");
+        String userName = getPara("userName");
+        String password = getPara("password");
         int roomId = getParaToInt("roomId");
         if (start.before(new Date())) {
             returnMap.put("isSuccess", false);
@@ -73,7 +76,9 @@ public class RoomScheduleController extends Controller {
             returnMap.put("msg", "Not a legal event. Please check again.");
         }
         else {
-            new RoomSchedule().set("start", start).set("end", end).set("subject", title).set("userid", getSessionAttr("userId")).set("roomid", roomId)
+            User user = new User();
+            user.set("name", userName).set("password", password).set("create_date", new Date()).save();
+            new RoomSchedule().set("start", start).set("end", end).set("subject", title).set("userid", user.get("id")).set("roomid", roomId)
                     .set("create_date", new Date()).save();
         }
         renderJson(returnMap);
