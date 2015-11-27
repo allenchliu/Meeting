@@ -6,13 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
+
 import com.jfinal.core.Controller;
 import com.jin.calendar.bo.RoomEvent;
 import com.jin.calendar.common.CommonConstant;
+import com.jin.calendar.model.Room;
 import com.jin.calendar.model.RoomSchedule;
 import com.jin.calendar.model.User;
 
 public class RoomScheduleController extends Controller {
+
+    public void index() {
+        setAttr("roomList", Room.dao.getAllRoom());
+        setAttr("ServerTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        render("bookRoom.jsp");
+    }
 
     public void getDurationEvent() {
         List<RoomSchedule> list = RoomSchedule.dao.getDurationEventsByRoomId(getParaToInt("roomId"), getParaToLong("start"), getParaToLong("end"));

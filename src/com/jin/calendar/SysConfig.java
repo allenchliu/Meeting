@@ -10,7 +10,6 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
 import com.jin.calendar.controller.AdminController;
-import com.jin.calendar.controller.CommonController;
 import com.jin.calendar.controller.MenuController;
 import com.jin.calendar.controller.RoomController;
 import com.jin.calendar.controller.RoomScheduleController;
@@ -43,7 +42,7 @@ public class SysConfig extends JFinalConfig {
 
     @Override
     public void configRoute(Routes me) {
-        me.add("/", CommonController.class);
+        me.add("/", RoomScheduleController.class);
         me.add("/user", UserController.class, "/admin");
         me.add("/menu", MenuController.class, "/admin");
         me.add("/userMenu", UserMenuController.class);
@@ -74,7 +73,7 @@ public class SysConfig extends JFinalConfig {
 
     @Override
     public void configInterceptor(Interceptors me) {
-        me.add(new LoginInterceptor());
+        // me.add(new LoginInterceptor());
     }
 
     @Override
