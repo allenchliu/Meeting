@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.jfinal.core.Controller;
@@ -20,7 +22,8 @@ public class RoomScheduleController extends Controller {
     public void index() {
         setAttr("roomList", Room.dao.getAllRoom());
         setAttr("ServerTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        render("bookRoom.jsp");
+        // render("bookRoom.jsp");
+        render("index.html");
     }
 
     public void getDurationEvent() {
@@ -56,7 +59,7 @@ public class RoomScheduleController extends Controller {
         }
         else if (!RoomSchedule.dao.isLegalEvent(getParaToLong("start") / 1000, getParaToLong("end") / 1000, getParaToInt("roomId"), getParaToInt("id"))) {
             returnMap.put("isSuccess", false);
-            returnMap.put("msg", "Not a legal event. Please check again.");
+            returnMap.put("msg", "Conflict with other meetings.");
         }
         else {
             RoomSchedule roomSchedule = RoomSchedule.dao.findById(getParaToInt("id"));
@@ -87,7 +90,10 @@ public class RoomScheduleController extends Controller {
         else {
             User user = new User();
             user.set("name", userName).set("password", password).set("create_date", new Date()).save();
-            new RoomSchedule().set("start", start).set("end", end).set("subject", title).set("userid", user.get("id")).set("roomid", roomId)
+            getSession().setAttribute("userId", user.getInt("id"));
+            getSession().setAttribute("username", user.getStr("userName"));
+            setCookie(new Cookie("userId", "" + user.getInt("id")));
+            new RoomSchedule().set("start", start).set("end", end).set("subject", userName).set("userid", user.get("id")).set("roomid", roomId)
                     .set("create_date", new Date()).save();
         }
         renderJson(returnMap);

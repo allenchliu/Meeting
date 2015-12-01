@@ -6,10 +6,10 @@ import com.jin.calendar.model.UserMenu;
 
 public class AdminController extends Controller {
 
-	public void index(){
-		setAttr("orderList", UserMenu.dao.getTodayOrder());
-		setAttr("meetingList", RoomSchedule.dao.getTodayEvent());
-		renderJsp("index.jsp");
-	}
-	
+    public void index() {
+        setAttr("orderList", UserMenu.dao.getTodayOrder());
+        setAttr("meetingList", RoomSchedule.dao.getTodayEvent());
+        renderJsp("samples/index.html");
+    }
+
 }

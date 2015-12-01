@@ -56,15 +56,15 @@ INSERT INTO `user_menu` (`userid`,`menuid`,`state`,`order_date`,`create_date`) V
 INSERT INTO `user_menu` (`userid`,`menuid`,`state`,`order_date`,`create_date`) VALUES (1,5,2,SUBDATE(now(),INTERVAL 1 DAY),'2014-04-26 22:09:49');
 INSERT INTO `user_menu` (`userid`,`menuid`,`state`,`order_date`,`create_date`) VALUES (1,6,2,ADDDATE(now(),INTERVAL 1 DAY),'2014-04-29 00:09:20');
 
--- 会议室表
+-- Room list
 create table room(
 id int primary key auto_increment,
 name varchar(32) not null
 );
-insert into room(id,name) values(1,'Room1');
-insert into room(id,name) values(2,'Room2');
-insert into room(id,name) values(3,'Room3');
-insert into room(id,name) values(4,'Room4');
+insert into room(id,name) values(1,'5F Pantry');
+insert into room(id,name) values(2,'5F Interview');
+insert into room(id,name) values(3,'3F Pantry');
+insert into room(id,name) values(4,'3F Big Room');
 
 create table room_schedule(
 id int primary key auto_increment,

@@ -42,20 +42,20 @@ $(document).ready(function() {
 		weekends:false,
 		minTime: 9,
 		maxTime: 19,
+		snapMinutes: 15,
+		eventOverlap:false,
 		allDaySlot: false,
 		allDayDefault: false,
+		selectable: true,
+		selectHelper: true,
 		buttonText: {
-			today: 'Today',
-			month: 'Month',
-			week: 'Week',
-			day: 'Day'
+			today: 'Today'
 		},
 		events: function( start, end, callback ) {
 			$.getJSON("/roomSchedule/getDurationEvent", { roomId: roomId,start:Math.round(start.getTime()/1000), end:Math.round(end.getTime()/1000)}, function(events){
 				callback(events);
 			});
 		},
-		snapMinutes: 5,
 		eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) {
 			$.getJSON("/roomSchedule/updateRoomEvent",{id: event.id, start: event.start.getTime(), end: event.end.getTime(), roomId: roomId}, function(data){
 				if(!data.isSuccess){
@@ -72,16 +72,14 @@ $(document).ready(function() {
 				}
 			});
 		},
-		selectable: true,
-		selectHelper: true,
 		select: function(start, end, allDay) {
 			if(start.getTime()<=new Date().getTime()){
 				alert("Please select a future hour.");
 			}else{
 				// var title = prompt('Meeting Subject: ');
 				var userName = prompt("Your Name: ");
-				var password = prompt("Set a simple password: ");
 				if (userName) {
+					var password = prompt("Set a simple password: ");
 					$.getJSON("/roomSchedule/addRoomEvent",{start: start.getTime(), end: end.getTime(), roomId: roomId, title: "", userName: userName, password: password}, function(data){
 						if(data.isSuccess){
 							$('#calendar').fullCalendar('refetchEvents');
@@ -93,6 +91,23 @@ $(document).ready(function() {
 			}
 			$('#calendar').fullCalendar('unselect');
 
+		},
+		eventRender: function(event, element) {
+			//console.log(element.html());
+			element.qtip({ 
+				id: event.id,
+				style: {
+					classes: 'qtip-bootstrap qtip-shadow'
+				},
+				content:{
+					title: event.roomName,
+					text: getTipContent(event.userName, event.start, event.end, event.title, event.email).clone()
+				},
+				position: {
+					my: 'right center',
+					at: 'left center'
+				}
+			});
 		},
 		loading: function(bool) {
 			if (bool) $('#loading').show();
@@ -153,17 +168,19 @@ function getTipContent(initiator, start, end, subject, contact){
 				<td><span id="initiator"></span></td>
 			</tr>
 			<tr>
-				<td>Contact: </td>
-				<td><span id="contact"></span></td>
-			</tr>
-			<tr>
 				<td>Time Slot: </td>
 				<td><span id="tb"></span></td>
+			</tr>
+			<!-- 
+			<tr>
+				<td>Contact: </td>
+				<td><span id="contact"></span></td>
 			</tr>
 			<tr>
 				<td>subject: </td>
 				<td><span id="subject"></span></td>
 			</tr>
+			 -->
 		</table>
 	</div>
 </body>

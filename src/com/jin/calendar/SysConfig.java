@@ -49,7 +49,6 @@ public class SysConfig extends JFinalConfig {
         me.add("/room", RoomController.class, "/admin");
         me.add("/roomSchedule", RoomScheduleController.class);
         me.add("/admin", AdminController.class);
-
     }
 
     @Override
