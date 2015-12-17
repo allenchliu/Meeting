@@ -23,7 +23,35 @@ public class RoomScheduleController extends Controller {
         setAttr("roomList", Room.dao.getAllRoom());
         setAttr("ServerTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
         // render("bookRoom.jsp");
+        render("index.jsp");
+    }
+
+    public void add() {
+        p("test add");
+        p(getPara("stime"));
         render("index.html");
+    }
+
+    public void delete() {
+        p("test delete");
+        // p(getPara("eid"));
+        // render("index.html");
+    }
+
+    public void update() {
+        p("test update");
+        // p(getPara("eid"));
+        // render("index.html");
+    }
+
+    public void load() {
+        p("test load");
+        renderJson(
+                "[                { start_date: \"2015-04-21 09:00\", end_date: \"2015-04-21 12:00\", text:\"test lesson\", subject: 'math' },            ]");
+    }
+
+    private void p(String str) {
+        System.out.println(str);
     }
 
     public void getDurationEvent() {

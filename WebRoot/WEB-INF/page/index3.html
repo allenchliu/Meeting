@@ -1,0 +1,226 @@
+<!doctype html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>Coloring events</title>
+
+	<script src="dhx/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="dhx/codebase/dhtmlxscheduler.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	
+	<style type="text/css" media="screen">
+		html, body{
+			margin:0;
+			padding:0;
+			height:100%;
+			overflow:hidden;
+		}
+
+		.dhx_cal_event div.dhx_footer,
+		.dhx_cal_event.past_event div.dhx_footer,
+		.dhx_cal_event.event_english div.dhx_footer,
+		.dhx_cal_event.event_math div.dhx_footer,
+		.dhx_cal_event.event_science div.dhx_footer{
+			background-color: transparent !important;
+		}
+		.dhx_cal_event .dhx_body{
+			-webkit-transition: opacity 0.1s;
+			transition: opacity 0.1s;
+			opacity: 0.7;
+		}
+		.dhx_cal_event .dhx_title{
+			line-height: 12px;
+		}
+		.dhx_cal_event_line:hover,
+		.dhx_cal_event:hover .dhx_body,
+		.dhx_cal_event.selected .dhx_body,
+		.dhx_cal_event.dhx_cal_select_menu .dhx_body{
+			opacity: 1;
+		}
+
+		.dhx_cal_event.event_math div, .dhx_cal_event_line.event_math{
+			background-color: orange !important;
+			border-color: #a36800 !important;
+		}
+		.dhx_cal_event_clear.event_math{
+			color:orange !important;
+		}
+
+		.dhx_cal_event.event_science div, .dhx_cal_event_line.event_science{
+			background-color: #36BD14 !important;
+			border-color: #698490 !important;
+		}
+		.dhx_cal_event_clear.event_science{
+			color:#36BD14 !important;
+		}
+
+		.dhx_cal_event.event_english div, .dhx_cal_event_line.event_english{
+			background-color: #FC5BD5 !important;
+			border-color: #839595 !important;
+		}
+		.dhx_cal_event_clear.event_english{
+			color:#B82594 !important;
+		}
+	</style>
+
+	    <script type="text/javascript" charset="utf-8">  
+        var prev = null;  
+        var curr = null;  
+        var next = null;  
+      
+        function doOnLoad()   
+             {  
+            scheduler.config.multi_day = true;  
+            scheduler.config.xml_date="%Y-%m-%d %H:%i";  
+            /*scheduler.config.drag_resize=false;   
+                    scheduler.config.drag_move=false;   
+                    scheduler.config.drag_create=false;   
+                scheduler.config.dblclick_create=false;  
+            scheduler.config.readonly=true;  
+                    scheduler.config.edit_on_create=false;  
+                    scheduler.config.details_on_create=false;  
+            */  
+            scheduler.init('scheduler_here',new Date(<%=year(now())%>,<%=month(now())-1%>,<%=day(now())%>),"day");  
+            scheduler.load("myevent.asp");  
+            var calendar = scheduler.renderCalendar({  
+                container:"cal_here",   
+                navigation:true,  
+                handler:function(date){  
+                    scheduler.setCurrentView(date, scheduler._mode);  
+                }  
+            });  
+            scheduler.linkCalendar(calendar);  
+            scheduler.setCurrentView(scheduler._date, scheduler._mode);  
+            scheduler.attachEvent("onEventAdded", function(event_id,event_object){  
+                            if (!event_object.text) {    
+                                            //如果内容是空的那么弹出警示框    
+                                            alert("请输入日程内容");    
+                                            return false;    
+                                }     
+                                        //提交程序  
+                            var sdatestr=new Date(event_object.start_date).format("YYYY-MM-dd hh:mm");  
+                            var edatestr=new Date(event_object.end_date).format("YYYY-MM-dd hh:mm");  
+                            var para="stime="+sdatestr+"&etime="+edatestr+"&eid="+event_id+"&title="+event_object.text+"";  
+                            var url="Schedule_add.asp";  
+                            var myAjax = new Ajax.Request(  
+                            url,  
+                            {  
+                            method: 'post',  
+                            parameters: encodeURI(para),  
+                            onComplete: showResponse  
+                            });  
+                              
+                              
+                            function showResponse(originalRequest)  
+                            {  
+                            if(originalRequest.responseText=="1")  
+                            {alert("日程添加成功！")}  
+                            else  
+                            {alert("日程添加失败，请检查！");  
+                            }  
+                            }  
+                            });   
+            scheduler.attachEvent("onEventSave",function(id, data){    
+                    if (!data.text) {    
+                                    //如果内容是空的那么弹出警示框    
+                                    alert("请输入日程内容");    
+                                    return false;    
+                            }     
+                        return true; });   
+                     //点击明细后、当事件被保存    
+            scheduler.attachEvent("onBeforeEventDelete", function(id, data){    
+                //删除日程程序   
+                     //提交程序  
+                              
+                            var para="eid="+id+"";  
+                            var url="Schedule_del.asp";  
+                            var myAjax = new Ajax.Request(  
+                            url,  
+                            {  
+                            method: 'post',  
+                            parameters: encodeURI(para),  
+                            onComplete: showResponse  
+                            });  
+                              
+                              
+                            function showResponse(originalRequest)  
+                            {  
+                            if(originalRequest.responseText=="1")  
+                            {alert("日程删除成功！")}  
+                            else  
+                            {alert("日程删除失败，请检查！")}  
+                            }         
+                 return true; });    
+              scheduler.attachEvent("onEventChanged", function(id,data){  
+                         
+                            //提交程序  
+                            var sdatestr=new Date(data.start_date).format("YYYY-MM-dd hh:mm");  
+                            var edatestr=new Date(data.end_date).format("YYYY-MM-dd hh:mm");  
+                            var para="stime="+sdatestr+"&etime="+edatestr+"&eid="+id+"&title="+data.text+"";  
+                            var url="Schedule_edit.asp";  
+                            var myAjax = new Ajax.Request(  
+                            url,  
+                            {  
+                            method: 'post',  
+                            parameters: encodeURI(para),  
+                            onComplete: showResponse  
+                            });  
+                              
+                              
+                            function showResponse(originalRequest)  
+                            {  
+                            if(originalRequest.responseText=="1")  
+                            {  
+                                //alert("日程修改成功！")  
+                            }  
+                            else  
+                            {  
+                                alert("日程修改失败，请检查！")  
+                                }  
+                            }   
+                 return true;  
+              });  
+        }  
+        /**  
+    * 时间对象的格式化;  
+    */  
+    Date.prototype.format = function(format){  
+     /*  
+      * eg:format="YYYY-MM-dd hh:mm:ss";  
+      */  
+     var o = {  
+      "Y+" :  this.getFullYear(),  
+      "M+" :  this.getMonth()+1,  //month  
+      "d+" :  this.getDate(),     //day  
+      "h+" :  this.getHours(),    //hour  
+          "m+" :  this.getMinutes(),  //minute  
+          "s+" :  this.getSeconds(), //second  
+          "q+" :  Math.floor((this.getMonth()+3)/3),  //quarter  
+          "S"  :  this.getMilliseconds() //millisecond  
+       }  
+        
+       if(/(Y+)/.test(format)) {  
+        format = format.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));  
+       }  
+       
+       for(var k in o) {  
+        if(new RegExp("("+ k +")").test(format)) {  
+          format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));  
+        }  
+       }  
+     return format;  
+    }  
+    </script>  
+</head>
+<body onload="init();">
+	<div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
+		<div class="dhx_cal_navline">
+			<div class="dhx_cal_prev_button">&nbsp;</div>
+			<div class="dhx_cal_next_button">&nbsp;</div>
+			<div class="dhx_cal_today_button"></div>
+			<div class="dhx_cal_date"></div>
+		</div>
+		<div class="dhx_cal_header">
+		</div>
+		<div class="dhx_cal_data">
+		</div>		
+	</div>
+</body>
