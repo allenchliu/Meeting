@@ -40,7 +40,7 @@ $(document).ready(function() {
 		defaultView:'agendaWeek',
 		firstDay:1,
 		weekends:false,
-		minTime: 9,
+		minTime: 10,
 		maxTime: 19,
 		snapMinutes: 15,
 		eventOverlap:false,
