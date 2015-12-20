@@ -1,5 +1,7 @@
 package com.jin.calendar.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,7 +14,6 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.jfinal.core.Controller;
 import com.jin.calendar.bo.RoomEvent;
-import com.jin.calendar.common.CommonConstant;
 import com.jin.calendar.model.Room;
 import com.jin.calendar.model.RoomSchedule;
 import com.jin.calendar.model.User;
@@ -26,10 +27,39 @@ public class RoomScheduleController extends Controller {
         render("index.jsp");
     }
 
-    public void add() {
+    public void add() throws ParseException {
         p("test add");
-        p(getPara("stime"));
-        render("index.jsp");
+        // p(getPara("start"));
+        // render("index.jsp");
+
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("isSuccess", true);
+        // Date start = new Date(new Calendar(getPara("start")));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date start = sdf.parse(getPara("start"));
+        Date end = sdf.parse(getPara("end"));
+        String title = getPara("title");
+        String userName = getPara("userName");
+        String password = getPara("password");
+        long roomId = getParaToLong("id");
+        if (start.before(new Date())) {
+            returnMap.put("isSuccess", false);
+            returnMap.put("msg", "The start time is already passed. Please choose a new time slot.");
+        }
+        else if (!RoomSchedule.dao.isLegalEvent(getParaToLong("start") / 1000, getParaToLong("end") / 1000, roomId, -100)) {
+            returnMap.put("isSuccess", false);
+            returnMap.put("msg", "Not a legal event. Please check again.");
+        }
+        else {
+            User user = new User();
+            user.set("name", userName).set("password", password).set("create_date", new Date()).save();
+            getSession().setAttribute("userId", user.getInt("id"));
+            getSession().setAttribute("username", user.getStr("userName"));
+            setCookie(new Cookie("userId", "" + user.getInt("id")));
+            new RoomSchedule().set("start", start).set("end", end).set("subject", userName).set("userid", user.get("id")).set("roomid", roomId)
+                    .set("create_date", new Date()).save();
+        }
+        renderJson(returnMap);
     }
 
     public void delete() {
@@ -44,31 +74,31 @@ public class RoomScheduleController extends Controller {
         render("index.jsp");
     }
 
-    public void load() {
-        p("test load");
-        renderJson("[{ start_date: \"2015-04-21 09:00\", end_date: \"2015-04-21 12:00\", text:\"test lesson\", subject: 'math' },]");
-    }
+    // public void load() {
+    // renderJson("[{ start_date: \"2015-12-21 09:00\", end_date: \"2015-12-21 12:00\", text:\"test lesson\", subject: 'math', password:\"allen\" },]");
+    // }
 
     private void p(String str) {
         System.out.println(str);
     }
 
     public void getDurationEvent() {
-        List<RoomSchedule> list = RoomSchedule.dao.getDurationEventsByRoomId(getParaToInt("roomId"), getParaToLong("start"), getParaToLong("end"));
+        p("test load");
+        List<RoomSchedule> list = RoomSchedule.dao.getDurationEventsByRoomId(getParaToInt("roomId"), getPara("start"), getPara("end"));
         List<RoomEvent> events = new ArrayList<>();
         for (RoomSchedule roomSchedule : list) {
             RoomEvent event = new RoomEvent(roomSchedule.getInt("id"), roomSchedule.getStr("subject"), roomSchedule.getTimestamp("start"),
                     roomSchedule.getTimestamp("end"), roomSchedule.getStr("username"), roomSchedule.getStr("roomname"), roomSchedule.getStr("email"), false);
-            if (roomSchedule.getTimestamp("start").before(new Date())) {
-                event.setColor(CommonConstant.COLOR_FOR_PAST_EVENT);
-            }
-            else if (roomSchedule.getInt("userid").equals(getSessionAttr("userId"))) {
-                event.setColor(CommonConstant.COLOR_FOR_OWN_FUTURE_EVENT);
-                event.setEditable(true);
-            }
-            else {
-                event.setColor(CommonConstant.COLOR_FOR_FUTURE_EVENT);
-            }
+            // if (roomSchedule.getTimestamp("start").before(new Date())) {
+            // event.setColor(CommonConstant.COLOR_FOR_PAST_EVENT);
+            // }
+            // else if (roomSchedule.getInt("userid").equals(getSessionAttr("userId"))) {
+            // event.setColor(CommonConstant.COLOR_FOR_OWN_FUTURE_EVENT);
+            // event.setEditable(true);
+            // }
+            // else {
+            // event.setColor(CommonConstant.COLOR_FOR_FUTURE_EVENT);
+            // }
             events.add(event);
         }
 
@@ -78,8 +108,8 @@ public class RoomScheduleController extends Controller {
     public void updateRoomEvent() {
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("isSuccess", true);
-        Date start = new Date(getParaToLong("start"));
-        Date end = new Date(getParaToLong("end"));
+        Date start = new Date(getPara("start"));
+        Date end = new Date(getPara("end"));
         if (start.before(new Date())) {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "The start time is already passed. Please choose a new time slot.");

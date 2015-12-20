@@ -9,8 +9,8 @@ public class Event implements Serializable {
 
 	protected int id;
 	protected String title;
-	protected Date start;
-	protected Date end;
+	protected Date start_date;
+	protected Date end_date;
 	protected String color;
 	protected String backgroundColor;
 	protected boolean editable;
@@ -30,10 +30,10 @@ public class Event implements Serializable {
 		this.title = title;
 	}
 	public Date getStart() {
-		return start;
+		return start_date;
 	}
 	public void setStart(Date start) {
-		this.start = start;
+		this.start_date = start;
 	}
 	public boolean isEditable() {
 		return editable;
@@ -42,10 +42,10 @@ public class Event implements Serializable {
 		this.editable = editable;
 	}
 	public Date getEnd() {
-		return end;
+		return end_date;
 	}
 	public void setEnd(Date end) {
-		this.end = end;
+		this.end_date = end;
 	}
 	public String getColor() {
 		return color;

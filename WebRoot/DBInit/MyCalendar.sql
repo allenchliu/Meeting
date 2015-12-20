@@ -68,14 +68,23 @@ insert into room(id,name) values(4,'3F Big Room');
 
 create table room_schedule(
 id int primary key auto_increment,
-subject varchar(256) not null,
+subject varchar(256),
 roomid int not null,
-userid int not null,
+username varchar(50) not null,
+password varchar(50) not null,
 start datetime not null,
 end datetime not null,
 create_date datetime not null
 );
-INSERT INTO `room_schedule` (`subject`,`roomid`,`userid`,`start`,`end`,`create_date`) VALUES ('羽毛球赛程讨论会',1,2,ADDDATE(now(),INTERVAL "1 4" DAY_HOUR),ADDDATE(now(),INTERVAL "1 5" DAY_HOUR),'2014-04-29 00:09:20');
-INSERT INTO `room_schedule` (`subject`,`roomid`,`userid`,`start`,`end`,`create_date`) VALUES ('全球环境保护会议',1,1,ADDDATE(now(),INTERVAL "1 2" DAY_HOUR),ADDDATE(now(),INTERVAL "1 3" DAY_HOUR),'2014-04-29 00:09:20');
-INSERT INTO `room_schedule` (`subject`,`roomid`,`userid`,`start`,`end`,`create_date`) VALUES ('国庆假期出游动员大会',1,1,SUBDATE(now(),INTERVAL "1 2" DAY_HOUR),SUBDATE(now(),INTERVAL "1 1" DAY_HOUR),'2014-04-29 00:09:20');
-INSERT INTO `room_schedule` (`subject`,`roomid`,`userid`,`start`,`end`,`create_date`) VALUES ('XX项目评审',1,1,now(),ADDDATE(now(),INTERVAL "2" HOUR),'2014-04-29 00:09:20');
+INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start`,`end`,`create_date`) 
+VALUES ('subject db',1,'username db','password', '2015-12-22 10:38:23','2015-12-22 11:38:23','2014-04-29 00:09:20');
+INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start`,`end`,`create_date`) 
+VALUES ('subject db2',1,'username db','password', ADDDATE(now(),INTERVAL "1 4" DAY_HOUR),ADDDATE(now(),INTERVAL "1 5" DAY_HOUR),'2014-04-29 00:09:20');
+INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start`,`end`,`create_date`) 
+VALUES ('subject db3',1,'username db','password', ADDDATE(now(),INTERVAL "1 4" DAY_HOUR),ADDDATE(now(),INTERVAL "1 5" DAY_HOUR),'2014-04-29 00:09:20');
+INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start`,`end`,`create_date`) 
+VALUES ('subject db',2,'username db','password', ADDDATE(now(),INTERVAL "1 4" DAY_HOUR),ADDDATE(now(),INTERVAL "1 5" DAY_HOUR),'2014-04-29 00:09:20');
+INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start`,`end`,`create_date`) 
+VALUES ('subject db2',2,'username db','password', ADDDATE(now(),INTERVAL "1 4" DAY_HOUR),ADDDATE(now(),INTERVAL "1 5" DAY_HOUR),'2014-04-29 00:09:20');
+INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start`,`end`,`create_date`) 
+VALUES ('subject db3',2,'username db','password', ADDDATE(now(),INTERVAL "1 4" DAY_HOUR),ADDDATE(now(),INTERVAL "1 5" DAY_HOUR),'2014-04-29 00:09:20');

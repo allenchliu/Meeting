@@ -69,10 +69,14 @@ html, body {
 </style>
 
 <script type="text/javascript" charset="utf-8">
+	var roomId;
 	function init() {
+		roomId= 1;
+		$("#room1").css("backgroundColor", "#003399");
+		
 		scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 		scheduler.config.time_step = 15;
-		scheduler.config.multi_day = true;
+		scheduler.config.multi_day = false;
 		scheduler.locale.labels.section_subject = "Subject";
 		scheduler.config.first_hour = 9;
 		scheduler.config.last_hour = 19;
@@ -96,18 +100,6 @@ html, body {
 			}
 			return css; // default return
 
-			/*
-				Note that it is possible to create more complex checks
-				events with the same properties could have different CSS classes depending on the current view:
-
-				var mode = scheduler.getState().mode;
-				if(mode == "day"){
-					// custom logic here
-				}
-				else {
-					// custom logic here
-				}
-			 */
 		};
 
 		var subject = [ {
@@ -137,38 +129,49 @@ html, body {
 			options : subject,
 			map_to : "subject"
 		}, {
+			name : "password",
+			height : 20,
+			map_to : "password",
+			type : "textarea"
+		}, {
 			name : "time",
 			height : 72,
 			type : "time",
 			map_to : "auto"
 		} ];
 
-		scheduler.init('scheduler_here', new Date(2015, 3, 20), "week");
+		scheduler.init('scheduler_here', new Date(2015, 11, 21), "week");
 
-		scheduler.load("/load");
+		//scheduler.load("/getDurationEvent");
+		$.ajax({
+			type : 'get',
+			url : "/getDurationEvent",
+			data : "roomId=" + roomId + "&start=" + "2015-12-20 02:38:23" + "&end=" + "2015-12-24 02:38:23" + "",
+			success : showResponse
+		});
+
+		function showResponse(data) {
+			Scheduler.parse(data);
+		};
+		
 		scheduler.parse([ {
-			start_date : "2015-04-18 09:00",
-			end_date : "2015-04-18 12:00",
+			start_date : "2015-12-18 09:00",
+			end_date : "2015-12-18 12:00",
 			text : "English lesson",
 			subject : 'math'
 		}, {
-			start_date : "2015-04-20 10:00",
-			end_date : "2015-04-21 16:00",
-			text : "Math exam",
-			subject : 'math'
-		}, {
-			start_date : "2015-04-21 10:00",
-			end_date : "2015-04-21 14:00",
+			start_date : "2015-12-21 10:00",
+			end_date : "2015-12-21 14:00",
 			text : "Science lesson",
 			subject : 'math'
 		}, {
-			start_date : "2015-04-23 16:00",
-			end_date : "2015-04-23 17:00",
+			start_date : "2015-12-23 16:00",
+			end_date : "2015-12-23 17:00",
 			text : "English lesson",
 			subject : 'english'
 		}, {
-			start_date : "2015-04-24 09:00",
-			end_date : "2015-04-24 17:00",
+			start_date : "2015-12-24 09:00",
+			end_date : "2015-12-24 17:00",
 			text : "Usual event"
 		} ], "json");
 
@@ -213,16 +216,15 @@ html, body {
 			}
 
 			var sdatestr = new Date(event_object.start_date)
-					.format("YYYY-MM-dd hh:mm");
+					.format("YYYY-MM-dd hh:mm:ss");
 			var edatestr = new Date(event_object.end_date)
-					.format("YYYY-MM-dd hh:mm");
-			var para = "stime=" + sdatestr + "&etime=" + edatestr + "&eid="
+					.format("YYYY-MM-dd hh:mm:ss");
+			var para = "start=" + sdatestr + "&end=" + edatestr + "&id="
 					+ event_id + "&title=" + event_object.text + "";
 			$.ajax({
 				type : 'post',
 				url : "/add",
-				data : "stime=" + sdatestr + "&etime=" + edatestr + "&eid="
-						+ event_id + "&title=" + event_object.text + "",
+				data : para,
 				success : function(data) {
 				}
 			});
@@ -269,6 +271,12 @@ html, body {
 </script>
 </head>
 <body onload="init();">
+	<div id='external-events'>
+		<h4>Meeting Rooms</h4>
+		<c:forEach items="${roomList}" var="room" varStatus="status">
+			<div class='external-event' id="room${status.count}" roomId="1" onclick="changeRoom(this.id)">${room.name}</div>
+		</c:forEach>
+	</div>
 	<div id="scheduler_here" class="dhx_cal_container"
 		style='width: 100%; height: 100%;'>
 		<div class="dhx_cal_navline">
