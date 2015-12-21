@@ -70,10 +70,11 @@ html, body {
 
 <script type="text/javascript" charset="utf-8">
 	var roomId;
+	var events;
 	function init() {
-		roomId= 1;
+		roomId = 1;
 		$("#room1").css("backgroundColor", "#003399");
-		
+
 		scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 		scheduler.config.time_step = 15;
 		scheduler.config.multi_day = false;
@@ -102,32 +103,17 @@ html, body {
 
 		};
 
-		var subject = [ {
-			key : '',
-			label : 'Appointment'
-		}, {
-			key : 'english',
-			label : 'English'
-		}, {
-			key : 'math',
-			label : 'Math'
-		}, {
-			key : 'science',
-			label : 'Science'
-		} ];
-
 		scheduler.config.lightbox.sections = [ {
-			name : "description",
-			height : 43,
+			name : "meeting name",
+			height : 20,
 			map_to : "text",
 			type : "textarea",
 			focus : true
 		}, {
-			name : "subject",
+			name : "user",
 			height : 20,
-			type : "select",
-			options : subject,
-			map_to : "subject"
+			map_to : "username",
+			type : "textarea"
 		}, {
 			name : "password",
 			height : 20,
@@ -140,40 +126,19 @@ html, body {
 			map_to : "auto"
 		} ];
 
-		scheduler.init('scheduler_here', new Date(2015, 11, 21), "week");
+		scheduler.init('scheduler_here', new Date(), "week");
 
 		//scheduler.load("/getDurationEvent");
 		$.ajax({
 			type : 'get',
 			url : "/getDurationEvent",
-			data : "roomId=" + roomId + "&start=" + "2015-12-20 02:38:23" + "&end=" + "2015-12-24 02:38:23" + "",
-			success : showResponse
+			dataType : "json",
+			data : "roomId=" + roomId + "&start=" + "2015-12-20 02:38:23"
+					+ "&end=" + "2015-12-24 02:38:23" + "",
+			success : function(msg) {
+				scheduler.parse(msg, "json");
+			}
 		});
-
-		function showResponse(data) {
-			Scheduler.parse(data);
-		};
-		
-		scheduler.parse([ {
-			start_date : "2015-12-18 09:00",
-			end_date : "2015-12-18 12:00",
-			text : "English lesson",
-			subject : 'math'
-		}, {
-			start_date : "2015-12-21 10:00",
-			end_date : "2015-12-21 14:00",
-			text : "Science lesson",
-			subject : 'math'
-		}, {
-			start_date : "2015-12-23 16:00",
-			end_date : "2015-12-23 17:00",
-			text : "English lesson",
-			subject : 'english'
-		}, {
-			start_date : "2015-12-24 09:00",
-			end_date : "2015-12-24 17:00",
-			text : "Usual event"
-		} ], "json");
 
 		scheduler.attachEvent("onEventChanged", function(id, data) {
 			var para = "eid=" + id + "";
@@ -274,7 +239,8 @@ html, body {
 	<div id='external-events'>
 		<h4>Meeting Rooms</h4>
 		<c:forEach items="${roomList}" var="room" varStatus="status">
-			<div class='external-event' id="room${status.count}" roomId="1" onclick="changeRoom(this.id)">${room.name}</div>
+			<div class='external-event' id="room${status.count}" roomId="1"
+				onclick="changeRoom(this.id)">${room.name}</div>
 		</c:forEach>
 	</div>
 	<div id="scheduler_here" class="dhx_cal_container"

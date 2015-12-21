@@ -87,8 +87,9 @@ public class RoomScheduleController extends Controller {
         List<RoomSchedule> list = RoomSchedule.dao.getDurationEventsByRoomId(getParaToInt("roomId"), getPara("start"), getPara("end"));
         List<RoomEvent> events = new ArrayList<>();
         for (RoomSchedule roomSchedule : list) {
-            RoomEvent event = new RoomEvent(roomSchedule.getInt("id"), roomSchedule.getStr("subject"), roomSchedule.getTimestamp("start"),
-                    roomSchedule.getTimestamp("end"), roomSchedule.getStr("username"), roomSchedule.getStr("roomname"), roomSchedule.getStr("email"), false);
+            RoomEvent event = new RoomEvent(roomSchedule.getInt("id"), roomSchedule.getStr("subject"), roomSchedule.getTimestamp("start_date"),
+                    roomSchedule.getTimestamp("end_date"), roomSchedule.getStr("username"), roomSchedule.getStr("roomname"), roomSchedule.getStr("email"),
+                    false);
             // if (roomSchedule.getTimestamp("start").before(new Date())) {
             // event.setColor(CommonConstant.COLOR_FOR_PAST_EVENT);
             // }

@@ -72,13 +72,13 @@ subject varchar(256),
 roomid int not null,
 username varchar(50) not null,
 password varchar(50) not null,
-start datetime not null,
-end datetime not null,
+start_date datetime not null,
+end_date datetime not null,
 create_date datetime not null
 );
-INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start`,`end`,`create_date`) 
+INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start_date`,`end_date`,`create_date`) 
 VALUES ('subject db',1,'username db','password', '2015-12-22 10:38:23','2015-12-22 11:38:23','2014-04-29 00:09:20');
-INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start`,`end`,`create_date`) 
+INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start_date`,`end_date`,`create_date`) 
 VALUES ('subject db2',1,'username db','password', ADDDATE(now(),INTERVAL "1 4" DAY_HOUR),ADDDATE(now(),INTERVAL "1 5" DAY_HOUR),'2014-04-29 00:09:20');
 INSERT INTO `room_schedule` (`subject`,`roomid`,`username`, `password`,`start`,`end`,`create_date`) 
 VALUES ('subject db3',1,'username db','password', ADDDATE(now(),INTERVAL "1 4" DAY_HOUR),ADDDATE(now(),INTERVAL "1 5" DAY_HOUR),'2014-04-29 00:09:20');

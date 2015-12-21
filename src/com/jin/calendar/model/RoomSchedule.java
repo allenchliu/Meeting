@@ -11,7 +11,7 @@ public class RoomSchedule extends Model<RoomSchedule> {
 
     public List<RoomSchedule> getDurationEventsByRoomId(long roomId, String start, String end) {
         String sqlStr = "select x.*, z.name roomname from room_schedule x left join room z on x.roomid=z.id "
-                + "where x.roomid= ? and x.start>= ? and x.start< ?";
+                + "where x.roomid= ? and x.start_date>= ? and x.start_date< ?";
         return dao.find(sqlStr, roomId, start, end);
     }
 
