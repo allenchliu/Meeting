@@ -14,19 +14,12 @@ import com.jin.calendar.controller.MenuController;
 import com.jin.calendar.controller.RoomController;
 import com.jin.calendar.controller.RoomScheduleController;
 import com.jin.calendar.controller.UserController;
-import com.jin.calendar.controller.UserMenuController;
 import com.jin.calendar.model.Menu;
 import com.jin.calendar.model.Room;
 import com.jin.calendar.model.RoomSchedule;
 import com.jin.calendar.model.User;
 import com.jin.calendar.model.UserMenu;
 
-/**
- * 绯荤粺閰嶇疆绫伙紝缁ф壙JFinalConfig锛岀敤浜庡鏁翠釜椤圭洰杩涜閰嶇疆
- * 
- * @author Jin
- * @datetime 2014骞�1鏈�15鏃� 涓嬪崍9:24:30
- */
 public class SysConfig extends JFinalConfig {
 
     @Override
@@ -45,7 +38,6 @@ public class SysConfig extends JFinalConfig {
         me.add("/", RoomScheduleController.class);
         me.add("/user", UserController.class, "/admin");
         me.add("/menu", MenuController.class, "/admin");
-        me.add("/userMenu", UserMenuController.class);
         me.add("/room", RoomController.class, "/admin");
         me.add("/roomSchedule", RoomScheduleController.class);
         me.add("/admin", AdminController.class);

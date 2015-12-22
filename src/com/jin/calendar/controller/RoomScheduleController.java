@@ -1,14 +1,11 @@
 package com.jin.calendar.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.Cookie;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -16,7 +13,6 @@ import com.jfinal.core.Controller;
 import com.jin.calendar.bo.RoomEvent;
 import com.jin.calendar.model.Room;
 import com.jin.calendar.model.RoomSchedule;
-import com.jin.calendar.model.User;
 
 public class RoomScheduleController extends Controller {
 
@@ -27,62 +23,17 @@ public class RoomScheduleController extends Controller {
         render("index.jsp");
     }
 
-    public void add() throws ParseException {
-        p("test add");
-        // p(getPara("start"));
-        // render("index.jsp");
-
-        Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("isSuccess", true);
-        // Date start = new Date(new Calendar(getPara("start")));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date start = sdf.parse(getPara("start"));
-        Date end = sdf.parse(getPara("end"));
-        String title = getPara("title");
-        String userName = getPara("userName");
-        String password = getPara("password");
-        long roomId = getParaToLong("id");
-        if (start.before(new Date())) {
-            returnMap.put("isSuccess", false);
-            returnMap.put("msg", "The start time is already passed. Please choose a new time slot.");
-        }
-        else if (!RoomSchedule.dao.isLegalEvent(getParaToLong("start") / 1000, getParaToLong("end") / 1000, roomId, -100)) {
-            returnMap.put("isSuccess", false);
-            returnMap.put("msg", "Not a legal event. Please check again.");
-        }
-        else {
-            User user = new User();
-            user.set("name", userName).set("password", password).set("create_date", new Date()).save();
-            getSession().setAttribute("userId", user.getInt("id"));
-            getSession().setAttribute("username", user.getStr("userName"));
-            setCookie(new Cookie("userId", "" + user.getInt("id")));
-            new RoomSchedule().set("start", start).set("end", end).set("subject", userName).set("userid", user.get("id")).set("roomid", roomId)
-                    .set("create_date", new Date()).save();
-        }
-        renderJson(returnMap);
-    }
-
     public void delete() {
         p("test delete");
         p(getPara("eid"));
         render("index.jsp");
     }
 
-    public void update() {
-        p("test update");
-        p(getPara("eid"));
-        render("index.jsp");
-    }
-
-    // public void load() {
-    // renderJson("[{ start_date: \"2015-12-21 09:00\", end_date: \"2015-12-21 12:00\", text:\"test lesson\", subject: 'math', password:\"allen\" },]");
-    // }
-
     private void p(String str) {
         System.out.println(str);
     }
 
-    public void getDurationEvent() {
+    public void load() {
         p("test load");
         List<RoomSchedule> list = RoomSchedule.dao.getDurationEventsByRoomId(getParaToInt("roomId"), getPara("start"), getPara("end"));
         List<RoomEvent> events = new ArrayList<>();
@@ -102,38 +53,40 @@ public class RoomScheduleController extends Controller {
             // }
             events.add(event);
         }
-
         renderJson(events);
     }
 
-    public void updateRoomEvent() {
+    public void update() {
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("isSuccess", true);
-        Date start = new Date(getPara("start"));
-        Date end = new Date(getPara("end"));
+        Date start = new Date(getPara("start_date"));
+        Date end = new Date(getPara("end_date"));
         if (start.before(new Date())) {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "The start time is already passed. Please choose a new time slot.");
         }
-        else if (!RoomSchedule.dao.isLegalEvent(getParaToLong("start") / 1000, getParaToLong("end") / 1000, getParaToInt("roomId"), getParaToInt("id"))) {
+        else if (!RoomSchedule.dao.isLegalEvent(start.getTime() / 1000, end.getTime() / 1000, getParaToInt("roomId"), getParaToInt("id"))) {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "Conflict with other meetings.");
         }
         else {
             RoomSchedule roomSchedule = RoomSchedule.dao.findById(getParaToInt("id"));
-            roomSchedule.set("start", start);
-            roomSchedule.set("end", end);
+            roomSchedule.set("start_date", start);
+            roomSchedule.set("end_date", end);
+            roomSchedule.set("username", getPara("userName"));
+            roomSchedule.set("subject", getPara("text"));
             roomSchedule.update();
         }
         renderJson(returnMap);
     }
 
-    public void addRoomEvent() {
+    public void add() throws ParseException {
+        p("test add");
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("isSuccess", true);
-        Date start = new Date(getParaToLong("start"));
-        Date end = new Date(getParaToLong("end"));
-        String title = getPara("title");
+        Date start = new Date(getPara("start_date"));
+        Date end = new Date(getPara("end_date"));
+        String text = getPara("text");
         String userName = getPara("userName");
         String password = getPara("password");
         int roomId = getParaToInt("roomId");
@@ -141,19 +94,20 @@ public class RoomScheduleController extends Controller {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "The start time is already passed. Please choose a new time slot.");
         }
-        else if (!RoomSchedule.dao.isLegalEvent(getParaToLong("start") / 1000, getParaToLong("end") / 1000, roomId, -100)) {
+        else if (!RoomSchedule.dao.isLegalEvent(start.getTime() / 1000, end.getTime() / 1000, roomId, -100)) {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "Not a legal event. Please check again.");
         }
         else {
-            User user = new User();
-            user.set("name", userName).set("password", password).set("create_date", new Date()).save();
-            getSession().setAttribute("userId", user.getInt("id"));
-            getSession().setAttribute("username", user.getStr("userName"));
-            setCookie(new Cookie("userId", "" + user.getInt("id")));
-            new RoomSchedule().set("start", start).set("end", end).set("subject", userName).set("userid", user.get("id")).set("roomid", roomId)
-                    .set("create_date", new Date()).save();
+            // User user = new User();
+            // user.set("name", userName).set("password", password).set("create_date", new Date()).save();
+            // getSession().setAttribute("userId", user.getInt("id"));
+            // getSession().setAttribute("username", user.getStr("userName"));
+            // setCookie(new Cookie("userId", "" + user.getInt("id")));
+            new RoomSchedule().set("start_date", start).set("end_date", end).set("username", userName).set("password", password).set("subject", text)
+                    .set("roomid", roomId).set("create_date", new Date()).save();
         }
         renderJson(returnMap);
     }
+
 }

@@ -71,7 +71,7 @@ id int primary key auto_increment,
 subject varchar(256),
 roomid int not null,
 username varchar(50) not null,
-password varchar(50) not null,
+password varchar(50),
 start_date datetime not null,
 end_date datetime not null,
 create_date datetime not null

@@ -112,7 +112,7 @@ html, body {
 		}, {
 			name : "user",
 			height : 20,
-			map_to : "username",
+			map_to : "userName",
 			type : "textarea"
 		}, {
 			name : "password",
@@ -128,24 +128,25 @@ html, body {
 
 		scheduler.init('scheduler_here', new Date(), "week");
 
-		//scheduler.load("/getDurationEvent");
+		var sdatestr = new Date().format("YYYY-MM-dd hh:mm:ss");
+		var edatestr = new Date().format("YYYY-MM-dd hh:mm:ss");
 		$.ajax({
 			type : 'get',
-			url : "/getDurationEvent",
+			url : "/load",
 			dataType : "json",
 			data : "roomId=" + roomId + "&start=" + "2015-12-20 02:38:23"
-					+ "&end=" + "2015-12-24 02:38:23" + "",
+					+ "&end=" + "2015-12-27 02:38:23" + "",
 			success : function(msg) {
 				scheduler.parse(msg, "json");
 			}
 		});
 
 		scheduler.attachEvent("onEventChanged", function(id, data) {
-			var para = "eid=" + id + "";
+			data.roomId = roomId;
 			$.ajax({
 				type : 'post',
 				url : "/update",
-				data : para,
+				data : data,
 				success : showResponse
 			});
 
@@ -160,6 +161,29 @@ html, body {
 			return true;
 		});
 
+		scheduler.attachEvent("onEventAdded", function(event_id, event_object) {
+			if (!event_object.text) {
+				alert("Please key in the subject, and userName");
+				return false;
+			}
+
+			event_object.roomId = roomId;
+			$.ajax({
+				type : 'post',
+				url : "/add",
+				data : event_object,
+				success : function(data) {
+				}
+			});
+
+			function showResponse(originalRequest) {
+				if (originalRequest.responseText == "1") {
+					alert("Added.")
+				} else {
+					alert("Failed to add");
+				}
+			}
+		});
 		scheduler.attachEvent("onBeforeEventDelete", function(id, data) {
 			var para = "eid=" + id + "";
 			$.ajax({
@@ -174,34 +198,6 @@ html, body {
 			return true;
 		});
 
-		scheduler.attachEvent("onEventAdded", function(event_id, event_object) {
-			if (!event_object.text) {
-				alert("Please key in the content");
-				return false;
-			}
-
-			var sdatestr = new Date(event_object.start_date)
-					.format("YYYY-MM-dd hh:mm:ss");
-			var edatestr = new Date(event_object.end_date)
-					.format("YYYY-MM-dd hh:mm:ss");
-			var para = "start=" + sdatestr + "&end=" + edatestr + "&id="
-					+ event_id + "&title=" + event_object.text + "";
-			$.ajax({
-				type : 'post',
-				url : "/add",
-				data : para,
-				success : function(data) {
-				}
-			});
-
-			function showResponse(originalRequest) {
-				if (originalRequest.responseText == "1") {
-					alert("Added.")
-				} else {
-					alert("Failed to add");
-				}
-			}
-		});
 	}
 
 	Date.prototype.format = function(format) {
