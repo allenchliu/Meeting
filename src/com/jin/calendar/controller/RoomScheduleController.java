@@ -23,6 +23,10 @@ public class RoomScheduleController extends Controller {
         render("index.jsp");
     }
 
+    private void p(String str) {
+        // System.out.println(str);
+    }
+
     public void delete() {
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("isSuccess", true);
@@ -36,10 +40,6 @@ public class RoomScheduleController extends Controller {
             roomSchedule.delete();
         }
         renderJson(returnMap);
-    }
-
-    private void p(String str) {
-        System.out.println(str);
     }
 
     public void load() {

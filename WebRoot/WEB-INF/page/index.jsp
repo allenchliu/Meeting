@@ -90,7 +90,7 @@ html, body {
 	var events;
 	function init() {
 		roomId = 1;
-		$("#roomId1").css("backgroundColor", "#003399");
+		$("#roomId1").css("backgroundColor", "#27A023");
 		scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 		scheduler.config.time_step = 15;
 		scheduler.config.multi_day = false;
@@ -140,6 +140,7 @@ html, body {
 					reload();
 				}
 			});
+			dhtmlx.message("Successfully updated");
 		});
 
 		scheduler.attachEvent("onEventAdded", function(id, data) {
@@ -157,6 +158,7 @@ html, body {
 					return false;
 				}
 			});
+			dhtmlx.message("Successfully scheduled");
 		});
 
 		scheduler.attachEvent("onBeforeEventDelete", function(id, data) {
@@ -167,6 +169,7 @@ html, body {
 					return false;
 				}
 			});
+			dhtmlx.message("Successfully deleted");
 			return true;
 		});
 
@@ -227,7 +230,7 @@ html, body {
 	function changeRoom(id) {
 		$(".room").each(function(i) {
 			if (this.id == id) {
-				$(this).css("backgroundColor", "#003399");
+				$(this).css("backgroundColor", "#27A023");
 				roomId = $(this).attr("roomId");
 			} else {
 				$(this).css("backgroundColor", "#B7A543");
