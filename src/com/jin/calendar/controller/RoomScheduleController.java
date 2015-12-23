@@ -27,8 +27,14 @@ public class RoomScheduleController extends Controller {
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("isSuccess", true);
         p("test delete");
-        RoomSchedule roomSchedule = RoomSchedule.dao.findById(getParaToInt("id"));
-        roomSchedule.delete();
+        RoomSchedule roomSchedule = RoomSchedule.dao.findById(getParaToLong("id"));
+        if (roomSchedule == null) {
+            returnMap.put("isSuccess", false);
+            returnMap.put("msg", "Such meeting is not scheduled.");
+        }
+        else {
+            roomSchedule.delete();
+        }
         renderJson(returnMap);
     }
 

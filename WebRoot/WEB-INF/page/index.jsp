@@ -18,6 +18,23 @@ html, body {
 	overflow: hidden;
 }
 
+.room {
+	cursor: pointer;
+	color: #ffffff;
+	font-size: 13px;
+	background-color: #B7A543;
+	width: 100px;
+	margin: 2px 12px;
+	border: 1px solid #BCD1FE;
+	float: left;
+	height: 24px;
+	text-align: center;
+	line-height: 24px;
+	border-radius: 2px;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans",
+		Geneva, Verda
+}
+
 .dhx_cal_event div.dhx_footer, .dhx_cal_event.past_event div.dhx_footer,
 	.dhx_cal_event.event_english div.dhx_footer, .dhx_cal_event.event_math div.dhx_footer,
 	.dhx_cal_event.event_science div.dhx_footer {
@@ -73,7 +90,7 @@ html, body {
 	var events;
 	function init() {
 		roomId = 1;
-
+		$("#roomId1").css("backgroundColor", "#003399");
 		scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 		scheduler.config.time_step = 15;
 		scheduler.config.multi_day = false;
@@ -114,12 +131,13 @@ html, body {
 
 		scheduler.init('scheduler_here', new Date(), "week");
 		reload();
-		
+
 		scheduler.attachEvent("onEventChanged", function(id, data) {
 			data.roomId = roomId;
 			$.getJSON("/update", data, function(msg) {
 				if (!msg.isSuccess) {
 					dhtmlx.message(msg.msg);
+					reload();
 				}
 			});
 		});
@@ -127,7 +145,7 @@ html, body {
 		scheduler.attachEvent("onEventAdded", function(id, data) {
 			if (!data.text || !data.userName) {
 				dhtmlx.message("Please key in the subject, and userName");
-				scheduler.updateEvent(data.id);
+				scheduler.deleteEvent(id);
 				return false;
 			}
 
@@ -135,7 +153,7 @@ html, body {
 			$.getJSON("/add", data, function(msg) {
 				if (!msg.isSuccess) {
 					dhtmlx.message(msg.msg);
-					reload();
+					scheduler.deleteEvent(id);
 					return false;
 				}
 			});
@@ -150,6 +168,10 @@ html, body {
 				}
 			});
 			return true;
+		});
+
+		scheduler.attachEvent("onEventCollision", function(ev, evs) {
+			return true; //blocks all other events
 		});
 
 	}
@@ -183,36 +205,50 @@ html, body {
 		}
 		return format;
 	}
-	
-	function reload()  
-    {  
+
+	function reload() {
 		var curr = new Date; // get current date
 		var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
 		var last = first + 6; // last day is the first day + 6
 		var firstday = new Date(curr.setDate(first));
 		var lastday = new Date(curr.setDate(last));
 		var sdatestr = firstday.format("YYYY-MM-dd hh:mm:ss");
-		var edatestr = lastday.format("YYYY-MM-dd hh:mm:ss");;
-		
-		var events = $.getJSON("/load", "roomId=" + roomId + "&start=" + sdatestr
-				+ "&end=" + edatestr + "", function(msg) {
-				scheduler.parse(msg, "json");
+		var edatestr = lastday.format("YYYY-MM-dd hh:mm:ss");
+		;
+
+		var events = $.getJSON("/load", "roomId=" + roomId + "&start="
+				+ sdatestr + "&end=" + edatestr + "", function(msg) {
+			scheduler.clearAll();
+			scheduler.parse(msg, "json");
+			//scheduler.setCurrentView();
 		});
-    }  
+	}
+
+	function changeRoom(id) {
+		$(".room").each(function(i) {
+			if (this.id == id) {
+				$(this).css("backgroundColor", "#003399");
+				roomId = $(this).attr("roomId");
+			} else {
+				$(this).css("backgroundColor", "#B7A543");
+			}
+		});
+		reload();
+	}
 </script>
 </head>
 <body onload="init();">
+	<div class="room" id="roomId3" roomId="3" name="3F Pantry"
+		onclick="changeRoom(this.id)">3F Pantry</div>
+	<div class="room" id="roomId4" roomId="4" name="3F Conference"
+		onclick="changeRoom(this.id)">3F Conference</div>
+	<div class="room" id="roomId1" roomId="1" name="5F Pantry"
+		onclick="changeRoom(this.id)">5F Pantry</div>
+	<div class="room" id="roomId2" roomId="2" name="5F Interview"
+		onclick="changeRoom(this.id)">5F Interview</div>
 	<div id="scheduler_here" class="dhx_cal_container"
 		style='width: 100%; height: 100%;'>
 		<div class="dhx_cal_navline">
-			<div class="dhx_cal_tab" id="roomId3" style="right: 76px;"
-				name="3F Pantry" onclick="alert(5F)"></div>
-			<div class="dhx_cal_tab" id="roomId4" style="right: 76px;"
-				name="3F Conference" onclick="alert(5F)"></div>
-			<div class="dhx_cal_tab" id="roomId1" style="right: 76px;"
-				name="5F Pantry" onclick="alert(5F)"></div>
-			<div class="dhx_cal_tab" id="roomId2" style="right: 76px;"
-				name="5F Interview" onclick="alert(5F)"></div>
 			<div class="dhx_cal_prev_button">&nbsp;</div>
 			<div class="dhx_cal_next_button">&nbsp;</div>
 			<div class="dhx_cal_today_button"></div>
