@@ -107,23 +107,23 @@ html, body {
 		};
 
 		scheduler.config.lightbox.sections = [ {
-			name : "meeting name",
+			name : "Meeting Name",
 			height : 20,
 			map_to : "text",
 			type : "textarea",
 			focus : true
 		}, {
-			name : "user",
+			name : "User",
 			height : 20,
 			map_to : "userName",
 			type : "textarea"
 		}, {
-			name : "password",
+			name : "Password",
 			height : 20,
 			map_to : "password",
 			type : "textarea"
 		}, {
-			name : "time",
+			name : "Time Period",
 			height : 72,
 			type : "time",
 			map_to : "auto"
