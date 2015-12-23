@@ -21,19 +21,6 @@ public class RoomSchedule extends Model<RoomSchedule> {
         return dao.find(sqlStr, roomId, start, end);
     }
 
-    public boolean isLegalEvent(String start, String end, long roomId, long id) {
-        String sql1 = "select count(*) from room_schedule " + " where start_date>? and start_date<? and roomid = ? and id <> ?";
-        String sql2 = "select count(*) from room_schedule " + " where end_date>? and end_date<? and roomid = ? and id <> ?";
-        String sql3 = "select count(*) from room_schedule " + " where start_date<=? and end_date>=? and roomid = ? and id <> ?";
-
-        Long n1 = Db.queryLong(sql1, start, end, roomId, id);
-        Long n2 = Db.queryLong(sql2, start, end, roomId, id);
-        Long n3 = Db.queryLong(sql3, start, end, roomId, id);
-
-        System.out.println(n1 + "-" + n2 + "-" + n3);
-        return (n1 + n2 + n3) == 0 ? true : false;
-    }
-
     public boolean isLegalEvent(long start, long end, long roomId, long id) {
         String sql1 = "select count(*) from room_schedule " + " where start_date>from_unixtime(?) and start_date<from_unixtime(?) and roomid = ? and id <> ?";
         String sql2 = "select count(*) from room_schedule " + " where end_date>from_unixtime(?) and end_date<from_unixtime(?) and roomid = ? and id <> ?";

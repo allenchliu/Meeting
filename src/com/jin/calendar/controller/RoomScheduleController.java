@@ -44,6 +44,7 @@ public class RoomScheduleController extends Controller {
             RoomEvent event = new RoomEvent(roomSchedule.getInt("id"), roomSchedule.getStr("subject"), roomSchedule.getTimestamp("start_date"),
                     roomSchedule.getTimestamp("end_date"), roomSchedule.getStr("username"), roomSchedule.getStr("roomname"), roomSchedule.getStr("email"),
                     false);
+            // event.setColor("green");
             events.add(event);
         }
         renderJson(events);
@@ -58,17 +59,23 @@ public class RoomScheduleController extends Controller {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "The start time is already passed. Please choose a new time slot.");
         }
-        else if (!RoomSchedule.dao.isLegalEvent(start.getTime() / 1000, end.getTime() / 1000, getParaToInt("roomId"), getParaToInt("id"))) {
+        else if (!RoomSchedule.dao.isLegalEvent(start.getTime() / 1000, end.getTime() / 1000, getParaToInt("roomId"), getParaToLong("id"))) {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "Conflict with other meetings.");
         }
         else {
-            RoomSchedule roomSchedule = RoomSchedule.dao.findById(getParaToInt("id"));
-            roomSchedule.set("start_date", start);
-            roomSchedule.set("end_date", end);
-            roomSchedule.set("username", getPara("userName"));
-            roomSchedule.set("subject", getPara("text"));
-            roomSchedule.update();
+            RoomSchedule roomSchedule = RoomSchedule.dao.findById(getParaToLong("id"));
+            if (roomSchedule == null) {
+                returnMap.put("isSuccess", false);
+                returnMap.put("msg", "The event doesn't exist, please refresh your page.");
+            }
+            else {
+                roomSchedule.set("start_date", start);
+                roomSchedule.set("end_date", end);
+                roomSchedule.set("username", getPara("userName"));
+                roomSchedule.set("subject", getPara("text"));
+                roomSchedule.update();
+            }
         }
         renderJson(returnMap);
     }

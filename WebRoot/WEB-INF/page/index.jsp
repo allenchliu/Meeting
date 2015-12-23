@@ -119,22 +119,22 @@ html, body {
 			data.roomId = roomId;
 			$.getJSON("/update", data, function(msg) {
 				if (!msg.isSuccess) {
-					alert(msg.msg);
-					reload();
+					dhtmlx.message(msg.msg);
 				}
 			});
 		});
 
 		scheduler.attachEvent("onEventAdded", function(id, data) {
 			if (!data.text || !data.userName) {
-				alert("Please key in the subject, and userName");
-				reload();
+				dhtmlx.message("Please key in the subject, and userName");
+				scheduler.updateEvent(data.id);
+				return false;
 			}
 
 			data.roomId = roomId;
 			$.getJSON("/add", data, function(msg) {
 				if (!msg.isSuccess) {
-					alert(msg.msg);
+					dhtmlx.message(msg.msg);
 					reload();
 					return false;
 				}
@@ -145,7 +145,7 @@ html, body {
 			data.roomId = roomId;
 			$.getJSON("/delete", data, function(msg) {
 				if (!msg.isSuccess) {
-					alert(msg.msg);
+					dhtmlx.message(msg.msg);
 					return false;
 				}
 			});
