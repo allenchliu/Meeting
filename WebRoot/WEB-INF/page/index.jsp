@@ -22,7 +22,7 @@ html, body {
 	cursor: pointer;
 	color: #ffffff;
 	font-size: 13px;
-	background-color: #B7A543;
+	background-color: #0CA1FE;
 	width: 100px;
 	margin: 2px 12px;
 	border: 1px solid #BCD1FE;
@@ -144,12 +144,6 @@ html, body {
 		});
 
 		scheduler.attachEvent("onEventAdded", function(id, data) {
-			if (!data.text || !data.userName) {
-				dhtmlx.message("Please key in the subject, and userName");
-				scheduler.deleteEvent(id);
-				return false;
-			}
-
 			data.roomId = roomId;
 			$.getJSON("/add", data, function(msg) {
 				if (!msg.isSuccess) {
@@ -159,6 +153,7 @@ html, body {
 				}
 			});
 			dhtmlx.message("Successfully scheduled");
+			return true;
 		});
 
 		scheduler.attachEvent("onBeforeEventDelete", function(id, data) {
@@ -233,7 +228,7 @@ html, body {
 				$(this).css("backgroundColor", "#27A023");
 				roomId = $(this).attr("roomId");
 			} else {
-				$(this).css("backgroundColor", "#B7A543");
+				$(this).css("backgroundColor", "#0CA1FE");
 			}
 		});
 		reload();
