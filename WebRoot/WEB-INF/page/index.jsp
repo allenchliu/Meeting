@@ -1,7 +1,7 @@
 <!doctype html>
 <head>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<title>Coloring events</title>
+<title>Meeting Room Scheduler</title>
 
 <script src="dhx/codebase/dhtmlxscheduler.js" type="text/javascript"
 	charset="utf-8"></script>
@@ -73,7 +73,6 @@ html, body {
 	var events;
 	function init() {
 		roomId = 1;
-		$("#room1").css("backgroundColor", "#003399");
 
 		scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 		scheduler.config.time_step = 15;
@@ -88,19 +87,6 @@ html, body {
 		scheduler.ignore_week = function(date) {
 			if (date.getDay() == 6 || date.getDay() == 0) //hides Saturdays and Sundays
 				return true;
-		};
-
-		scheduler.templates.event_class = function(start, end, event) {
-			var css = "";
-
-			if (event.subject) // if event has subject property then special class should be assigned
-				css += "event_" + event.subject;
-
-			if (event.id == scheduler.getState().select_id) {
-				css += " selected";
-			}
-			return css; // default return
-
 		};
 
 		scheduler.config.lightbox.sections = [ {
@@ -127,74 +113,42 @@ html, body {
 		} ];
 
 		scheduler.init('scheduler_here', new Date(), "week");
-
-		var sdatestr = new Date().format("YYYY-MM-dd hh:mm:ss");
-		var edatestr = new Date().format("YYYY-MM-dd hh:mm:ss");
-		$.ajax({
-			type : 'get',
-			url : "/load",
-			dataType : "json",
-			data : "roomId=" + roomId + "&start=" + "2015-12-20 02:38:23"
-					+ "&end=" + "2015-12-27 02:38:23" + "",
-			success : function(msg) {
-				scheduler.parse(msg, "json");
-			}
-		});
-
+		reload();
+		
 		scheduler.attachEvent("onEventChanged", function(id, data) {
 			data.roomId = roomId;
-			$.ajax({
-				type : 'post',
-				url : "/update",
-				data : data,
-				success : showResponse
-			});
-
-			function showResponse(data) {
-				//alert(data.responseText);
-				if (data.responseText == "1") {
-					//alert("Event updated")  
-				} else {
-					//alert("Failed to update event")
+			$.getJSON("/update", data, function(msg) {
+				if (!msg.isSuccess) {
+					alert(msg.msg);
+					reload();
 				}
-			}
-			return true;
+			});
 		});
 
-		scheduler.attachEvent("onEventAdded", function(event_id, event_object) {
-			if (!event_object.text) {
+		scheduler.attachEvent("onEventAdded", function(id, data) {
+			if (!data.text || !data.userName) {
 				alert("Please key in the subject, and userName");
-				return false;
+				reload();
 			}
 
-			event_object.roomId = roomId;
-			$.ajax({
-				type : 'post',
-				url : "/add",
-				data : event_object,
-				success : function(data) {
+			data.roomId = roomId;
+			$.getJSON("/add", data, function(msg) {
+				if (!msg.isSuccess) {
+					alert(msg.msg);
+					reload();
+					return false;
 				}
 			});
-
-			function showResponse(originalRequest) {
-				if (originalRequest.responseText == "1") {
-					alert("Added.")
-				} else {
-					alert("Failed to add");
-				}
-			}
 		});
-		scheduler.attachEvent("onBeforeEventDelete", function(id, data) {
-			var para = "eid=" + id + "";
-			$.ajax({
-				type : 'post',
-				url : "/delete",
-				data : para,
-				success : showResponse
-			});
 
-			function showResponse(data) {
-			}
+		scheduler.attachEvent("onBeforeEventDelete", function(id, data) {
+			data.roomId = roomId;
+			$.getJSON("/delete", data, function(msg) {
+				if (!msg.isSuccess) {
+					alert(msg.msg);
+					return false;
+				}
+			});
 			return true;
 		});
 
@@ -229,19 +183,36 @@ html, body {
 		}
 		return format;
 	}
+	
+	function reload()  
+    {  
+		var curr = new Date; // get current date
+		var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+		var last = first + 6; // last day is the first day + 6
+		var firstday = new Date(curr.setDate(first));
+		var lastday = new Date(curr.setDate(last));
+		var sdatestr = firstday.format("YYYY-MM-dd hh:mm:ss");
+		var edatestr = lastday.format("YYYY-MM-dd hh:mm:ss");;
+		
+		var events = $.getJSON("/load", "roomId=" + roomId + "&start=" + sdatestr
+				+ "&end=" + edatestr + "", function(msg) {
+				scheduler.parse(msg, "json");
+		});
+    }  
 </script>
 </head>
 <body onload="init();">
-	<div id='external-events'>
-		<h4>Meeting Rooms</h4>
-		<c:forEach items="${roomList}" var="room" varStatus="status">
-			<div class='external-event' id="room${status.count}" roomId="1"
-				onclick="changeRoom(this.id)">${room.name}</div>
-		</c:forEach>
-	</div>
 	<div id="scheduler_here" class="dhx_cal_container"
 		style='width: 100%; height: 100%;'>
 		<div class="dhx_cal_navline">
+			<div class="dhx_cal_tab" id="roomId3" style="right: 76px;"
+				name="3F Pantry" onclick="alert(5F)"></div>
+			<div class="dhx_cal_tab" id="roomId4" style="right: 76px;"
+				name="3F Conference" onclick="alert(5F)"></div>
+			<div class="dhx_cal_tab" id="roomId1" style="right: 76px;"
+				name="5F Pantry" onclick="alert(5F)"></div>
+			<div class="dhx_cal_tab" id="roomId2" style="right: 76px;"
+				name="5F Interview" onclick="alert(5F)"></div>
 			<div class="dhx_cal_prev_button">&nbsp;</div>
 			<div class="dhx_cal_next_button">&nbsp;</div>
 			<div class="dhx_cal_today_button"></div>

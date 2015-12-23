@@ -24,9 +24,12 @@ public class RoomScheduleController extends Controller {
     }
 
     public void delete() {
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("isSuccess", true);
         p("test delete");
-        p(getPara("eid"));
-        render("index.jsp");
+        RoomSchedule roomSchedule = RoomSchedule.dao.findById(getParaToInt("id"));
+        roomSchedule.delete();
+        renderJson(returnMap);
     }
 
     private void p(String str) {
@@ -41,16 +44,6 @@ public class RoomScheduleController extends Controller {
             RoomEvent event = new RoomEvent(roomSchedule.getInt("id"), roomSchedule.getStr("subject"), roomSchedule.getTimestamp("start_date"),
                     roomSchedule.getTimestamp("end_date"), roomSchedule.getStr("username"), roomSchedule.getStr("roomname"), roomSchedule.getStr("email"),
                     false);
-            // if (roomSchedule.getTimestamp("start").before(new Date())) {
-            // event.setColor(CommonConstant.COLOR_FOR_PAST_EVENT);
-            // }
-            // else if (roomSchedule.getInt("userid").equals(getSessionAttr("userId"))) {
-            // event.setColor(CommonConstant.COLOR_FOR_OWN_FUTURE_EVENT);
-            // event.setEditable(true);
-            // }
-            // else {
-            // event.setColor(CommonConstant.COLOR_FOR_FUTURE_EVENT);
-            // }
             events.add(event);
         }
         renderJson(events);
