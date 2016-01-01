@@ -24,7 +24,7 @@ public class RoomScheduleController extends Controller {
     }
 
     private void p(String str) {
-        // System.out.println(str);
+        System.out.println(str);
     }
 
     public void delete() {
@@ -65,6 +65,10 @@ public class RoomScheduleController extends Controller {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "The start time is already passed. Please choose a new time slot.");
         }
+        else if (end.getTime() / 1000 > ((new Date()).getTime() / 1000 + 60 * 24 * 3600)) {
+            returnMap.put("isSuccess", false);
+            returnMap.put("msg", "Only 60 days future reservation is allowed");
+        }
         else if (!RoomSchedule.dao.isLegalEvent(start.getTime() / 1000, end.getTime() / 1000, getParaToInt("roomId"), getParaToLong("id"))) {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "Conflict with other meetings.");
@@ -99,6 +103,10 @@ public class RoomScheduleController extends Controller {
         if (start.before(new Date())) {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "The start time is already passed. Please choose a new time slot.");
+        }
+        else if (end.getTime() / 1000 > ((new Date()).getTime() / 1000 + 60 * 24 * 3600)) {
+            returnMap.put("isSuccess", false);
+            returnMap.put("msg", "Only 60 days future reservation is allowed");
         }
         else if (!RoomSchedule.dao.isLegalEvent(start.getTime() / 1000, end.getTime() / 1000, roomId, -100)) {
             returnMap.put("isSuccess", false);

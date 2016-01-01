@@ -138,9 +138,10 @@ html, body {
 				if (!msg.isSuccess) {
 					dhtmlx.message(msg.msg);
 					reload();
+				} else {
+					dhtmlx.message("Successfully updated");
 				}
 			});
-			dhtmlx.message("Successfully updated");
 		});
 
 		scheduler.attachEvent("onEventAdded", function(id, data) {
@@ -150,9 +151,10 @@ html, body {
 					dhtmlx.message(msg.msg);
 					scheduler.deleteEvent(id);
 					return false;
+				} else {
+					dhtmlx.message("Successfully scheduled");
 				}
 			});
-			dhtmlx.message("Successfully scheduled");
 			return true;
 		});
 
@@ -160,11 +162,12 @@ html, body {
 			data.roomId = roomId;
 			$.getJSON("/delete", data, function(msg) {
 				if (!msg.isSuccess) {
-					dhtmlx.message(msg.msg);
+					//dhtmlx.message(msg.msg);
 					return false;
+				} else {
+					dhtmlx.message("Successfully deleted");
 				}
 			});
-			dhtmlx.message("Successfully deleted");
 			return true;
 		});
 
@@ -207,11 +210,13 @@ html, body {
 	function reload() {
 		var curr = new Date; // get current date
 		var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-		var last = first + 6; // last day is the first day + 6
+		var last = first + 60; // two months duration
+		//dhtmlx.message("Week: " + first + " to " + last);
 		var firstday = new Date(curr.setDate(first));
-		var lastday = new Date(curr.setDate(last));
-		var sdatestr = firstday.format("YYYY-MM-dd hh:mm:ss");
-		var edatestr = lastday.format("YYYY-MM-dd hh:mm:ss");
+		var lastday = new Date((new Date).setDate(last));
+		//dhtmlx.message("Week: " + firstday + " to " + lastday);
+		var sdatestr = firstday.format("YYYY-MM-dd 00:00:00");
+		var edatestr = lastday.format("YYYY-MM-dd 23:59:59");
 		;
 
 		var events = $.getJSON("/load", "roomId=" + roomId + "&start="
