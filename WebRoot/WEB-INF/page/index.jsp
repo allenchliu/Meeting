@@ -100,11 +100,11 @@ html, body {
 		scheduler.config.limit_time_select = true;
 		scheduler.config.details_on_dblclick = true;
 		scheduler.config.details_on_create = true;
-		
+
 		// 0 refers to Sunday, 6 - to Saturday
 		scheduler.ignore_week = function(date) {
 			//if (date.getDay() == 6 || date.getDay() == 0) //hides Saturdays and Sundays
-				//return true;
+			//return true;
 		};
 
 		scheduler.config.lightbox.sections = [ {
@@ -154,6 +154,7 @@ html, body {
 			$.getJSON("/delete", data, function(msg) {
 				if (!msg.isSuccess) {
 					dhtmlx.message(msg.msg);
+					reload();
 					return false;
 				} else {
 					dhtmlx.message("Successfully deleted");

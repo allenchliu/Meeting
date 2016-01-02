@@ -26,7 +26,7 @@ public class RoomScheduleController extends Controller {
     }
 
     private void p(String str) {
-        System.out.println(str);
+        // System.out.println(str);
     }
 
     public void delete() {
