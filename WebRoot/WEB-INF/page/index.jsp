@@ -100,28 +100,19 @@ html, body {
 		scheduler.config.limit_time_select = true;
 		scheduler.config.details_on_dblclick = true;
 		scheduler.config.details_on_create = true;
+		
 		// 0 refers to Sunday, 6 - to Saturday
 		scheduler.ignore_week = function(date) {
-			if (date.getDay() == 6 || date.getDay() == 0) //hides Saturdays and Sundays
-				return true;
+			//if (date.getDay() == 6 || date.getDay() == 0) //hides Saturdays and Sundays
+				//return true;
 		};
 
 		scheduler.config.lightbox.sections = [ {
-			name : "Meeting Name",
+			name : "User",
 			height : 20,
 			map_to : "text",
 			type : "textarea",
 			focus : true
-		}, {
-			name : "User",
-			height : 20,
-			map_to : "userName",
-			type : "textarea"
-		}, {
-			name : "Password",
-			height : 20,
-			map_to : "password",
-			type : "textarea"
 		}, {
 			name : "Time Period",
 			height : 72,
@@ -162,7 +153,7 @@ html, body {
 			data.roomId = roomId;
 			$.getJSON("/delete", data, function(msg) {
 				if (!msg.isSuccess) {
-					//dhtmlx.message(msg.msg);
+					dhtmlx.message(msg.msg);
 					return false;
 				} else {
 					dhtmlx.message("Successfully deleted");

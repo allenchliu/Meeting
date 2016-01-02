@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.jfinal.core.Controller;
@@ -35,6 +37,10 @@ public class RoomScheduleController extends Controller {
         if (roomSchedule == null) {
             returnMap.put("isSuccess", false);
             returnMap.put("msg", "Such meeting is not scheduled.");
+        }
+        else if (!roomSchedule.getStr("password").equals(getRemoteLoginUserIp(getRequest()))) {
+            returnMap.put("isSuccess", false);
+            returnMap.put("msg", "Not with the same IP who created this meeting. Your IP: " + getRemoteLoginUserIp(getRequest()));
         }
         else {
             roomSchedule.delete();
@@ -79,10 +85,14 @@ public class RoomScheduleController extends Controller {
                 returnMap.put("isSuccess", false);
                 returnMap.put("msg", "The event doesn't exist, please refresh your page.");
             }
+            else if (!roomSchedule.getStr("password").equals(getRemoteLoginUserIp(getRequest()))) {
+                returnMap.put("isSuccess", false);
+                returnMap.put("msg", "Not with the same IP who created this meeting. Your IP: " + getRemoteLoginUserIp(getRequest()));
+            }
             else {
                 roomSchedule.set("start_date", start);
                 roomSchedule.set("end_date", end);
-                roomSchedule.set("username", getPara("userName"));
+                roomSchedule.set("username", getPara("text"));
                 roomSchedule.set("subject", getPara("text"));
                 roomSchedule.update();
             }
@@ -98,7 +108,7 @@ public class RoomScheduleController extends Controller {
         Date end = new Date(getPara("end_date"));
         String text = getPara("text");
         String userName = getPara("userName");
-        String password = getPara("password");
+        String password = getRemoteLoginUserIp(getRequest());
         int roomId = getParaToInt("roomId");
         if (start.before(new Date())) {
             returnMap.put("isSuccess", false);
@@ -118,10 +128,25 @@ public class RoomScheduleController extends Controller {
             // getSession().setAttribute("userId", user.getInt("id"));
             // getSession().setAttribute("username", user.getStr("userName"));
             // setCookie(new Cookie("userId", "" + user.getInt("id")));
-            new RoomSchedule().set("start_date", start).set("end_date", end).set("username", userName).set("password", password).set("subject", text)
+            new RoomSchedule().set("start_date", start).set("end_date", end).set("username", text).set("password", password).set("subject", text)
                     .set("roomid", roomId).set("create_date", new Date()).save();
         }
         renderJson(returnMap);
+    }
+
+    private String getRemoteLoginUserIp(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        p(ip);
+        return ip;
     }
 
 }
