@@ -17,7 +17,6 @@ import com.jin.calendar.model.Room;
 import com.jin.calendar.model.RoomSchedule;
 
 public class RoomScheduleController extends Controller {
-
     public void index() {
         setAttr("roomList", Room.dao.getAllRoom());
         setAttr("ServerTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
@@ -40,7 +39,7 @@ public class RoomScheduleController extends Controller {
         }
         else if (!roomSchedule.getStr("password").equals(getRemoteLoginUserIp(getRequest()))) {
             returnMap.put("isSuccess", false);
-            returnMap.put("msg", "Not with the same IP who created this meeting. Your IP: " + getRemoteLoginUserIp(getRequest()));
+            returnMap.put("msg", "Not the owner who created this meeting. Your IP: " + getRemoteLoginUserIp(getRequest()));
         }
         else {
             roomSchedule.delete();
@@ -94,6 +93,7 @@ public class RoomScheduleController extends Controller {
                 roomSchedule.set("end_date", end);
                 roomSchedule.set("username", getPara("text"));
                 roomSchedule.set("subject", getPara("text"));
+                roomSchedule.set("password", getRemoteLoginUserIp(getRequest()));
                 roomSchedule.update();
             }
         }

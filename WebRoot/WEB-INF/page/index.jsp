@@ -5,6 +5,8 @@
 
 <script src="dhx/codebase/dhtmlxscheduler.js" type="text/javascript"
 	charset="utf-8"></script>
+<script src="dhx/codebase/ext/dhtmlxscheduler_cookie.js"
+	type="text/javascript" charset="utf-8"></script>
 <link rel="stylesheet" href="dhx/codebase/dhtmlxscheduler.css"
 	type="text/css" media="screen" title="no title" charset="utf-8">
 <script src="js/jquery-1.7.2.min.js" type="text/javascript"
@@ -35,53 +37,15 @@ html, body {
 		Geneva, Verda
 }
 
-.dhx_cal_event div.dhx_footer, .dhx_cal_event.past_event div.dhx_footer,
-	.dhx_cal_event.event_english div.dhx_footer, .dhx_cal_event.event_math div.dhx_footer,
-	.dhx_cal_event.event_science div.dhx_footer {
-	background-color: transparent !important;
-}
-
 .dhx_cal_event .dhx_body {
 	-webkit-transition: opacity 0.1s;
 	transition: opacity 0.1s;
-	opacity: 0.7;
+	opacity: 0.9;
 }
 
-.dhx_cal_event .dhx_title {
-	line-height: 12px;
-}
-
-.dhx_cal_event_line:hover, .dhx_cal_event:hover .dhx_body,
-	.dhx_cal_event.selected .dhx_body, .dhx_cal_event.dhx_cal_select_menu .dhx_body
-	{
-	opacity: 1;
-}
-
-.dhx_cal_event.event_math div, .dhx_cal_event_line.event_math {
+.dhx_cal_event.event_mine div, .dhx_cal_event_line.event_mine {
 	background-color: orange !important;
 	border-color: #a36800 !important;
-}
-
-.dhx_cal_event_clear.event_math {
-	color: orange !important;
-}
-
-.dhx_cal_event.event_science div, .dhx_cal_event_line.event_science {
-	background-color: #36BD14 !important;
-	border-color: #698490 !important;
-}
-
-.dhx_cal_event_clear.event_science {
-	color: #36BD14 !important;
-}
-
-.dhx_cal_event.event_english div, .dhx_cal_event_line.event_english {
-	background-color: #FC5BD5 !important;
-	border-color: #839595 !important;
-}
-
-.dhx_cal_event_clear.event_english {
-	color: #B82594 !important;
 }
 </style>
 
@@ -89,8 +53,9 @@ html, body {
 	var roomId;
 	var events;
 	function init() {
-		roomId = 1;
-		$("#roomId1").css("backgroundColor", "#27A023");
+		roomId = getCookie("meeting_room_id") ? getCookie("meeting_room_id")
+				: 1;
+		$("#roomId" + roomId).css("backgroundColor", "#27A023");
 		scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 		scheduler.config.time_step = 15;
 		scheduler.config.multi_day = false;
@@ -128,10 +93,11 @@ html, body {
 			$.getJSON("/update", data, function(msg) {
 				if (!msg.isSuccess) {
 					dhtmlx.message(msg.msg);
-					reload();
 				} else {
 					dhtmlx.message("Successfully updated");
+					setCookie("meeting_user", data.text);
 				}
+				reload();
 			});
 		});
 
@@ -141,12 +107,12 @@ html, body {
 				if (!msg.isSuccess) {
 					dhtmlx.message(msg.msg);
 					scheduler.deleteEvent(id);
-					return false;
 				} else {
 					dhtmlx.message("Successfully scheduled");
+					setCookie("meeting_user", data.text);
 				}
+				reload();
 			});
-			return true;
 		});
 
 		scheduler.attachEvent("onBeforeEventDelete", function(id, data) {
@@ -155,7 +121,6 @@ html, body {
 				if (!msg.isSuccess) {
 					dhtmlx.message(msg.msg);
 					reload();
-					return false;
 				} else {
 					dhtmlx.message("Successfully deleted");
 				}
@@ -167,6 +132,12 @@ html, body {
 			return true; //blocks all other events
 		});
 
+		scheduler.templates.event_class = function(start, end, event) {
+			var css = "";
+			if (event.text == getCookie("meeting_user"))
+				css += " event_mine";
+			return css; // default return
+		};
 	}
 
 	Date.prototype.format = function(format) {
@@ -224,11 +195,27 @@ html, body {
 			if (this.id == id) {
 				$(this).css("backgroundColor", "#27A023");
 				roomId = $(this).attr("roomId");
+				setCookie("meeting_room_id", roomId);
 			} else {
 				$(this).css("backgroundColor", "#0CA1FE");
 			}
 		});
 		reload();
+	}
+
+	function getCookie(name) {
+		var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+		if (arr = document.cookie.match(reg))
+			return unescape(arr[2]);
+		else
+			return null;
+	}
+	function setCookie(name, value) {
+		var Days = 30;
+		var exp = new Date();
+		exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+		document.cookie = name + "=" + escape(value) + ";expires="
+				+ exp.toGMTString();
 	}
 </script>
 </head>
@@ -248,6 +235,9 @@ html, body {
 			<div class="dhx_cal_next_button">&nbsp;</div>
 			<div class="dhx_cal_today_button"></div>
 			<div class="dhx_cal_date"></div>
+			<div class="dhx_cal_tab" name="day_tab" style="right: 204px;"></div>
+			<div class="dhx_cal_tab" name="week_tab" style="right: 140px;"></div>
+			<div class="dhx_cal_tab" name="month_tab" style="right: 76px;"></div>
 		</div>
 		<div class="dhx_cal_header"></div>
 		<div class="dhx_cal_data"></div>
