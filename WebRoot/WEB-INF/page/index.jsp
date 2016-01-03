@@ -5,6 +5,10 @@
 
 <script src="dhx/codebase/dhtmlxscheduler.js" type="text/javascript"
 	charset="utf-8"></script>
+<script src="dhx/codebase/ext/dhtmlxscheduler_recurring.js"
+	type="text/javascript" charset="utf-8"></script>
+<script src="dhx/codebase/ext/dhtmlxscheduler_minical.js"
+	type="text/javascript" charset="utf-8"></script>
 <link rel="stylesheet" href="dhx/codebase/dhtmlxscheduler.css"
 	type="text/css" media="screen" title="no title" charset="utf-8">
 <script src="js/jquery-1.7.2.min.js" type="text/javascript"
@@ -70,17 +74,57 @@ html, body {
 			//return true;
 		};
 
+		scheduler.config.occurrence_timestamp_in_utc = true;
+		scheduler.config.include_end_by = true;
+		scheduler.config.repeat_precise = true;
+
+		scheduler.attachEvent("onLightbox", function() {
+			var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
+			var inputs = lightbox_form.getElementsByTagName('input');
+			document.getElementsByTagName('textarea').innerHTML = "Someone";
+			var date_of_end = null;
+			for (var i = 0; i < inputs.length; i++) {
+				if (inputs[i].name == "date_of_end") {
+					date_of_end = inputs[i];
+					break;
+				}
+			}
+
+			var repeat_end_date_format = scheduler.date
+					.date_to_str(scheduler.config.repeat_date);
+			var show_minical = function() {
+				if (scheduler.isCalendarVisible())
+					scheduler.destroyCalendar();
+				else {
+					scheduler.renderCalendar({
+						position : date_of_end,
+						date : scheduler.getState().date,
+						navigation : true,
+						handler : function(date, calendar) {
+							date_of_end.value = repeat_end_date_format(date);
+							scheduler.destroyCalendar()
+						}
+					});
+				}
+			};
+			date_of_end.onclick = show_minical;
+		});
+
 		scheduler.config.lightbox.sections = [ {
-			name : "User",
+			name : "Your Name",
 			height : 26,
 			map_to : "text",
 			type : "textarea",
-			default_value : "someone",
 			focus : true
+		//}, {
+		//	name : "recurring",
+		//	type : "recurring",
+		//	map_to : "rec_type",
+		//	button : "recurring"
 		}, {
 			name : "Time Period",
 			height : 72,
-			type : "time",
+			type : "calendar_time",
 			time_format : [ "%H:%i", "%m", "%d", "%Y" ],
 			map_to : "auto"
 		} ];
@@ -130,12 +174,6 @@ html, body {
 
 		scheduler.attachEvent("onEventCollision", function(ev, evs) {
 			return true; //blocks all other events
-		});
-
-		scheduler.attachEvent("onBeforeLightbox", function(id) {
-			scheduler.formSection('User').setValue('abc');
-			//$("textarea").val("abc");
-			return true;
 		});
 
 		scheduler.templates.event_class = function(start, end, event) {
