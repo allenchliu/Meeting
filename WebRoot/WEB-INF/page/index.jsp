@@ -5,8 +5,6 @@
 
 <script src="dhx/codebase/dhtmlxscheduler.js" type="text/javascript"
 	charset="utf-8"></script>
-<script src="dhx/codebase/ext/dhtmlxscheduler_cookie.js"
-	type="text/javascript" charset="utf-8"></script>
 <link rel="stylesheet" href="dhx/codebase/dhtmlxscheduler.css"
 	type="text/css" media="screen" title="no title" charset="utf-8">
 <script src="js/jquery-1.7.2.min.js" type="text/javascript"
@@ -55,7 +53,7 @@ html, body {
 	function init() {
 		roomId = getCookie("meeting_room_id") ? getCookie("meeting_room_id")
 				: 1;
-		$("#roomId" + roomId).css("backgroundColor", "#27A023");
+		$("#roomId" + roomId).css("backgroundColor", "orange");
 		scheduler.config.xml_date = "%Y-%m-%d %H:%i";
 		scheduler.config.time_step = 15;
 		scheduler.config.multi_day = false;
@@ -65,8 +63,8 @@ html, body {
 		scheduler.config.limit_time_select = true;
 		scheduler.config.details_on_dblclick = true;
 		scheduler.config.details_on_create = true;
+		scheduler.config.icons_select = [ "icon_details", "icon_delete" ];
 
-		// 0 refers to Sunday, 6 - to Saturday
 		scheduler.ignore_week = function(date) {
 			//if (date.getDay() == 6 || date.getDay() == 0) //hides Saturdays and Sundays
 			//return true;
@@ -74,14 +72,16 @@ html, body {
 
 		scheduler.config.lightbox.sections = [ {
 			name : "User",
-			height : 20,
+			height : 26,
 			map_to : "text",
 			type : "textarea",
+			default_value : "someone",
 			focus : true
 		}, {
 			name : "Time Period",
 			height : 72,
 			type : "time",
+			time_format : [ "%H:%i", "%m", "%d", "%Y" ],
 			map_to : "auto"
 		} ];
 
@@ -132,9 +132,16 @@ html, body {
 			return true; //blocks all other events
 		});
 
+		scheduler.attachEvent("onBeforeLightbox", function(id) {
+			scheduler.formSection('User').setValue('abc');
+			//$("textarea").val("abc");
+			return true;
+		});
+
 		scheduler.templates.event_class = function(start, end, event) {
 			var css = "";
-			if (event.text == getCookie("meeting_user"))
+			if (event.text.toLowerCase() == getCookie("meeting_user")
+					.toLowerCase())
 				css += " event_mine";
 			return css; // default return
 		};
@@ -193,7 +200,7 @@ html, body {
 	function changeRoom(id) {
 		$(".room").each(function(i) {
 			if (this.id == id) {
-				$(this).css("backgroundColor", "#27A023");
+				$(this).css("backgroundColor", "orange");
 				roomId = $(this).attr("roomId");
 				setCookie("meeting_room_id", roomId);
 			} else {
@@ -220,10 +227,10 @@ html, body {
 </script>
 </head>
 <body onload="init();">
-	<div class="room" id="roomId3" roomId="3" name="3F Pantry"
-		onclick="changeRoom(this.id)">3F Pantry</div>
 	<div class="room" id="roomId4" roomId="4" name="3F Conference"
 		onclick="changeRoom(this.id)">3F Conference</div>
+	<div class="room" id="roomId3" roomId="3" name="3F Pantry"
+		onclick="changeRoom(this.id)">3F Pantry</div>
 	<div class="room" id="roomId1" roomId="1" name="5F Pantry"
 		onclick="changeRoom(this.id)">5F Pantry</div>
 	<div class="room" id="roomId2" roomId="2" name="5F Interview"
