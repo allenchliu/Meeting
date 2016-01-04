@@ -53,7 +53,7 @@ public class RoomScheduleController extends Controller {
             RoomEvent event = new RoomEvent(roomSchedule.getInt("id"), roomSchedule.getStr("subject"), roomSchedule.getTimestamp("start_date"),
                     roomSchedule.getTimestamp("end_date"), roomSchedule.getStr("username"), roomSchedule.getStr("roomname"), roomSchedule.getStr("email"),
                     false);
-            // event.setColor("green");
+            event.setPassword(roomSchedule.getStr("password"));
             events.add(event);
         }
         renderJson(events);
@@ -128,6 +128,7 @@ public class RoomScheduleController extends Controller {
             // setCookie(new Cookie("userId", "" + user.getInt("id")));
             new RoomSchedule().set("start_date", start).set("end_date", end).set("username", text).set("password", password).set("subject", text)
                     .set("roomid", roomId).set("create_date", new Date()).save();
+            returnMap.put("msg", password);
         }
         renderJson(returnMap);
     }

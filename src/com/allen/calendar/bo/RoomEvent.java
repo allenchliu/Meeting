@@ -15,6 +15,7 @@ public class RoomEvent extends Event {
     protected Date start_date;
     protected Date end_date;
     protected String color;
+    protected String password;
     // protected String backgroundColor;
     // protected boolean editable;
 
@@ -67,6 +68,14 @@ public class RoomEvent extends Event {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
     //
     // public String getBackgroundColor() {

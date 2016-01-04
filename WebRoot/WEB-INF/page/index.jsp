@@ -122,6 +122,7 @@ html, body {
 				} else {
 					dhtmlx.message("Successfully scheduled");
 					setCookie("meeting_user", data.text);
+					setCookie("user_ip", msg.msg);
 				}
 				reload();
 			});
@@ -146,8 +147,7 @@ html, body {
 
 		scheduler.templates.event_class = function(start, end, event) {
 			var css = "";
-			if (event.text.toLowerCase() == getCookie("meeting_user")
-					.toLowerCase())
+			if (getCookie("user_ip") == event.password)
 				css += " event_mine";
 			return css; // default return
 		};
@@ -187,13 +187,11 @@ html, body {
 		var curr = new Date; // get current date
 		var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
 		var last = first + 60; // two months duration
-		//dhtmlx.message("Week: " + first + " to " + last);
 		var firstday = new Date(curr.setDate(first));
 		var lastday = new Date((new Date).setDate(last));
 		//dhtmlx.message("Week: " + firstday + " to " + lastday);
 		var sdatestr = firstday.format("YYYY-MM-dd 00:00:00");
 		var edatestr = lastday.format("YYYY-MM-dd 23:59:59");
-		;
 
 		var events = $.getJSON("/load", "roomId=" + roomId + "&start="
 				+ sdatestr + "&end=" + edatestr + "", function(msg) {
