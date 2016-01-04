@@ -27,7 +27,7 @@ html, body {
 	color: #ffffff;
 	font-size: 13px;
 	background-color: #0CA1FE;
-	width: 100px;
+	width: 150px;
 	margin: 2px 12px;
 	border: 1px solid #BCD1FE;
 	float: left;
@@ -231,14 +231,18 @@ html, body {
 </script>
 </head>
 <body onload="init();">
-	<div class="room" id="roomId4" roomId="4" name="3F Conference"
-		onclick="changeRoom(this.id)">3F Conference</div>
+	<div class="room" id="roomId4" roomId="4" name="3F Lifesize Room"
+		onclick="changeRoom(this.id)">3F Lifesize Room</div>
 	<div class="room" id="roomId3" roomId="3" name="3F Pantry"
 		onclick="changeRoom(this.id)">3F Pantry</div>
 	<div class="room" id="roomId1" roomId="1" name="5F Pantry"
 		onclick="changeRoom(this.id)">5F Pantry</div>
-	<div class="room" id="roomId2" roomId="2" name="5F Interview"
-		onclick="changeRoom(this.id)">5F Interview</div>
+	<div class="room" id="roomId2" roomId="2" name="5F IT Room"
+		onclick="changeRoom(this.id)">5F IT Room</div>
+	<div class="room" id="roomId5" roomId="5" name="5F Pantry"
+		onclick="changeRoom(this.id)">1.5F Meeting Room</div>
+	<div class="room" id="roomId6" roomId="6" name="5F IT Room"
+		onclick="changeRoom(this.id)">1.5F Seating Area</div>
 	<div id="scheduler_here" class="dhx_cal_container"
 		style='width: 100%; height: 100%;'>
 		<div class="dhx_cal_navline">
