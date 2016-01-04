@@ -78,38 +78,6 @@ html, body {
 		scheduler.config.include_end_by = true;
 		scheduler.config.repeat_precise = true;
 
-		scheduler.attachEvent("onLightbox", function() {
-			var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
-			var inputs = lightbox_form.getElementsByTagName('input');
-			document.getElementsByTagName('textarea').innerHTML = "Someone";
-			var date_of_end = null;
-			for (var i = 0; i < inputs.length; i++) {
-				if (inputs[i].name == "date_of_end") {
-					date_of_end = inputs[i];
-					break;
-				}
-			}
-
-			var repeat_end_date_format = scheduler.date
-					.date_to_str(scheduler.config.repeat_date);
-			var show_minical = function() {
-				if (scheduler.isCalendarVisible())
-					scheduler.destroyCalendar();
-				else {
-					scheduler.renderCalendar({
-						position : date_of_end,
-						date : scheduler.getState().date,
-						navigation : true,
-						handler : function(date, calendar) {
-							date_of_end.value = repeat_end_date_format(date);
-							scheduler.destroyCalendar()
-						}
-					});
-				}
-			};
-			date_of_end.onclick = show_minical;
-		});
-
 		scheduler.config.lightbox.sections = [ {
 			name : "Your Name",
 			height : 26,

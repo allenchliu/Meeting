@@ -1,4 +1,4 @@
-package com.jin.calendar.common;
+package com.allen.calendar.common;
 
 public class CommonConstant {
 

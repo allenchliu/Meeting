@@ -1,4 +1,4 @@
-package com.jin.calendar.controller;
+package com.allen.calendar.controller;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -11,16 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
+import com.allen.calendar.bo.RoomEvent;
+import com.allen.calendar.model.RoomSchedule;
 import com.jfinal.core.Controller;
-import com.jin.calendar.bo.RoomEvent;
-import com.jin.calendar.model.Room;
-import com.jin.calendar.model.RoomSchedule;
 
 public class RoomScheduleController extends Controller {
     public void index() {
-        setAttr("roomList", Room.dao.getAllRoom());
+        // setAttr("roomList", Room.dao.getAllRoom());
         setAttr("ServerTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
-        // render("bookRoom.jsp");
         render("index.jsp");
     }
 

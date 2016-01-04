@@ -1,4 +1,4 @@
-package com.jin.calendar.bo;
+package com.allen.calendar.bo;
 
 import java.io.Serializable;
 

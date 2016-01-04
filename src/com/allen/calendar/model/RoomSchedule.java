@@ -1,4 +1,4 @@
-package com.jin.calendar.model;
+package com.allen.calendar.model;
 
 import java.util.List;
 
@@ -10,14 +10,7 @@ public class RoomSchedule extends Model<RoomSchedule> {
     public static final RoomSchedule dao = new RoomSchedule();
 
     public List<RoomSchedule> getDurationEventsByRoomId(long roomId, String start, String end) {
-        String sqlStr = "select x.*, z.name roomname from room_schedule x left join room z on x.roomid=z.id "
-                + "where x.roomid= ? and x.start_date>= ? and x.start_date< ?";
-        return dao.find(sqlStr, roomId, start, end);
-    }
-
-    public List<RoomSchedule> getDurationEventsByRoomId(long roomId, long start, long end) {
-        String sqlStr = "select x.*,y.name username,y.email, z.name roomname from room_schedule x left join user y on x.userid = y.id left join room z on x.roomid=z.id "
-                + " where x.roomid= ? and x.start>=from_unixtime(?) and x.start<from_unixtime(?)";
+        String sqlStr = "select x.* from room_schedule x where x.roomid= ? and x.start_date>= ? and x.start_date< ?";
         return dao.find(sqlStr, roomId, start, end);
     }
 
@@ -32,12 +25,6 @@ public class RoomSchedule extends Model<RoomSchedule> {
 
         System.out.println(n1 + "-" + n2 + "-" + n3);
         return (n1 + n2 + n3) == 0 ? true : false;
-    }
-
-    public List<RoomSchedule> getTodayEvent() {
-        String sqlStr = "select x.*,y.name username,y.tel,y.email, z.name roomname from room_schedule x " + " left join user y on x.userid = y.id "
-                + " left join room z on x.roomid=z.id " + " where to_days(start)=to_days(now()) order by start asc";
-        return dao.find(sqlStr);
     }
 
 }
