@@ -70,8 +70,8 @@ html, body {
 		scheduler.config.icons_select = [ "icon_details", "icon_delete" ];
 
 		scheduler.ignore_week = function(date) {
-			//if (date.getDay() == 6 || date.getDay() == 0) //hides Saturdays and Sundays
-			//return true;
+			if (date.getDay() == 6 || date.getDay() == 0) //hides Saturdays and Sundays
+			return true;
 		};
 
 		scheduler.config.occurrence_timestamp_in_utc = true;
@@ -186,7 +186,7 @@ html, body {
 	function reload() {
 		var curr = new Date; // get current date
 		var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-		var last = first + 60; // two months duration
+		var last = first + 65; // two months duration
 		var firstday = new Date(curr.setDate(first));
 		var lastday = new Date((new Date).setDate(last));
 		//dhtmlx.message("Week: " + firstday + " to " + lastday);
